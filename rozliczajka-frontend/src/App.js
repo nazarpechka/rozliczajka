@@ -1,5 +1,6 @@
 import Navbar from './Navbar';
 import Jumbotron from './Jumbotron';
+import Footer from './Footer';
 import './App.css';
 
 const App = () => {
@@ -7,6 +8,7 @@ const App = () => {
 		<div className='App'>
 			<Navbar />
 			<Jumbotron />
+			<Footer />
 		</div>
 	);
 };

@@ -4,21 +4,21 @@
 	justify-content: space-between;
 	align-items: center;
 
+	border-radius: 5px;
 	-webkit-box-shadow: 0px 5px 30px -10px rgba(255, 162, 0, 1);
 	-moz-box-shadow: 0px 5px 30px -10px rgba(255, 162, 0, 1);
 	box-shadow: 0px 5px 30px -10px rgba(255, 162, 0, 1);
+	font-weight: 500;
 }
 
 .navheader {
-	font-weight: 500;
+	margin: 20px 0;
 }
 
 .navlink {
 	padding: 20px 50px;
 	color: black;
-	background-color: white;
 	text-decoration: none;
-	font-weight: 500;
 	font-size: 20px;
 }
 

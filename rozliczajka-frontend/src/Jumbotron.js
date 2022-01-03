@@ -13,7 +13,7 @@ const Jumbotron = () => {
 						korzystaj ze wszystkich możliwośći Rozliczajki.{' '}
 					</p>
 				</div>
-				<img src={image} className='jumbotron-image' />
+				<img src={image} className='jumbotron-image' alt='' />
 			</div>
 		</div>
 	);
