@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/rozliczajka/static/css/main.e19db04e.css",
-    "main.js": "/rozliczajka/static/js/main.cf21ed28.js",
+    "main.css": "/rozliczajka/static/css/main.b0717cfc.css",
+    "main.js": "/rozliczajka/static/js/main.77456fa2.js",
     "static/media/guys.png": "/rozliczajka/static/media/guys.500fc636576724738d8d.png",
     "index.html": "/rozliczajka/index.html",
-    "main.e19db04e.css.map": "/rozliczajka/static/css/main.e19db04e.css.map",
-    "main.cf21ed28.js.map": "/rozliczajka/static/js/main.cf21ed28.js.map"
+    "main.b0717cfc.css.map": "/rozliczajka/static/css/main.b0717cfc.css.map",
+    "main.77456fa2.js.map": "/rozliczajka/static/js/main.77456fa2.js.map"
   },
   "entrypoints": [
-    "static/css/main.e19db04e.css",
-    "static/js/main.cf21ed28.js"
+    "static/css/main.b0717cfc.css",
+    "static/js/main.77456fa2.js"
   ]
 }
