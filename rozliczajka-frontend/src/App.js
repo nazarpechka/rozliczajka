@@ -1,9 +1,12 @@
-function App() {
+import Navbar from './Navbar';
+import './App.css';
+
+const App = () => {
 	return (
 		<div className='App'>
-			<h1>Rozliczajka</h1>
+			<Navbar />
 		</div>
 	);
-}
+};
 
 export default App;
