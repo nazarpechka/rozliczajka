@@ -1,3 +1,16 @@
+body {
+	margin: 0;
+	font-family: 'Roboto', sans-serif;
+	font-size: 18px;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+code {
+	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+		monospace;
+}
+
 .container {
 	width: 1440px;
 	margin: 0 auto;
@@ -7,7 +20,7 @@
 }
 
 .section {
-	padding: 25px 50px;
+	padding: 100px 50px;
 	border-radius: 5px;
 	-webkit-box-shadow: 3px 3px 20px 0px rgba(204, 204, 204, 1);
 	-moz-box-shadow: 3px 3px 20px 0px rgba(204, 204, 204, 1);

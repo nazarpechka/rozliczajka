@@ -1,0 +1,17 @@
+.jumbotron {
+	display: flex;
+}
+
+.jumbotron-title {
+	font-size: 72px;
+}
+
+.jumbotron-text {
+	width: 50%;
+}
+
+.jumbotron-image {
+	/* float: right; */
+	width: 50%;
+	height: 50%;
+}
