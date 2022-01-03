@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/rozliczajka/static/css/main.a0c4b003.css",
+    "main.js": "/rozliczajka/static/js/main.e1f2ba0a.js",
+    "index.html": "/rozliczajka/index.html",
+    "main.a0c4b003.css.map": "/rozliczajka/static/css/main.a0c4b003.css.map",
+    "main.e1f2ba0a.js.map": "/rozliczajka/static/js/main.e1f2ba0a.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a0c4b003.css",
+    "static/js/main.e1f2ba0a.js"
+  ]
+}
