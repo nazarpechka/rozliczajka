@@ -1,0 +1,26 @@
+{
+  "name": "rozliczajka",
+  "version": "1.0.0",
+  "description": "Appliaction to track group expenses",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nazarpechka/rozliczajka.git"
+  },
+  "author": "Nazar Pechevystyi, Daniil Gordetsky, Sofiia Malyshok",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nazarpechka/rozliczajka/issues"
+  },
+  "homepage": "https://github.com/nazarpechka/rozliczajka#readme",
+  "devDependencies": {
+    "eslint": "^8.6.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.5.1"
+  }
+}
