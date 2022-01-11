@@ -62,4 +62,17 @@ module.exports = {
       }
     });
   },
+
+  getGroup: (req, res) => {
+    GroupModel.findById(req.params.id)
+      .populate('manager', 'name surname email city')
+      .populate('participants', 'name surname  email city')
+      .exec((err, group) => {
+        if (err) {
+          res.send(err);
+        } else {
+          res.status(200).send(group);
+        }
+      });
+  },
 };

@@ -21,6 +21,7 @@ const groupSchema = new mongoose.Schema({
   },
   participants: {
     type: [mongoose.Types.ObjectId],
+    ref: 'User',
   },
   manager: {
     type: mongoose.Types.ObjectId,
