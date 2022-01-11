@@ -19,4 +19,27 @@ module.exports = {
       }
     });
   },
+
+  addUser: (req, res) => {
+    GroupModel.findById(req.params.id, async (err, group) => {
+      if (err) {
+        res.send(err);
+      } else {
+        UserModel.findById(req.body.userId, (err, user) => {
+          if (!user.isParticipant) {
+            res.status(400).send('User is not participant');
+          } else {
+            group.participants.push(req.body.userId)
+            group.save((err, updatedGroup) => {
+              if (err) {
+                res.send(err);
+              } else {
+                res.status(200).send(updatedGroup);
+              }
+            });
+          }
+        });
+      }
+    });
+  }
 };

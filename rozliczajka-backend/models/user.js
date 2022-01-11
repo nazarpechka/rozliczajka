@@ -41,6 +41,7 @@ const userSchema = new mongoose.Schema({
   },
   pesel: {
     type: String,
+    length: 11,
   },
   agency: {
     type: String,
