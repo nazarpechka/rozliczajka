@@ -1,4 +1,4 @@
-const { createGroup, addUser } = require('../controllers/group');
+const { createGroup, addUser, leaveGroup } = require('../controllers/group');
 
 module.exports = (router) => {
   router.route('/group')
@@ -6,5 +6,8 @@ module.exports = (router) => {
   
   router.route('/group/:id/add-user')
     .post(addUser);
+  
+  router.route('/group/:id/leave-group')
+    .delete(leaveGroup);
 
 };

@@ -21,12 +21,12 @@ module.exports = {
   },
 
   addUser: (req, res) => {
-    GroupModel.findById(req.params.id, async (err, group) => {
+    GroupModel.findById(req.params.id, (err, group) => {
       if (err) {
-        res.send(err);
+        res.status(404).send(err);
       } else {
         UserModel.findById(req.body.userId, (err, user) => {
-          if (!user.isParticipant) {
+          if (!user || !user.isParticipant) {
             res.status(400).send('User is not participant');
           } else {
             group.participants.push(req.body.userId)
@@ -41,5 +41,25 @@ module.exports = {
         });
       }
     });
-  }
+  },
+
+  leaveGroup: (req, res) => {
+    GroupModel.findById(req.params.id, (err, group) => {
+      if (err) {
+        res.status(404).send(err);
+      } else if (!group.participants.includes(req.body.userId)) {
+        res.status(400).send('There is not participant in this group with such id');
+      } else {
+        const updatedParticipants = group.participants.filter(participant => participant.toString() !== req.body.userId);
+        group.participants = updatedParticipants;
+        group.save((err, updatedGroup) => {
+          if (err) {
+            res.send(err);
+          } else {
+            res.status(200).send(updatedGroup);
+          }
+        });
+      }
+    });
+  },
 };
