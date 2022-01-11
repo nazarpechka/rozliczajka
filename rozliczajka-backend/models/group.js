@@ -24,6 +24,7 @@ const groupSchema = new mongoose.Schema({
   },
   manager: {
     type: mongoose.Types.ObjectId,
+    ref: 'User',
     required: true,
   },
 });
