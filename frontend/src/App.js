@@ -3,7 +3,6 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./routes/Home";
 import NotFound from "./routes/NotFound";
-import "./App.css";
 
 const App = () => {
   return (

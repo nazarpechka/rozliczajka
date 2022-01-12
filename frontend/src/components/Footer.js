@@ -1,18 +1,10 @@
-import './Footer.css';
-
 const Footer = () => {
-	return (
-		<div className='container'>
-			<footer>
-				<div>
-					<span>Copyright Rozliczajka 2021</span>
-				</div>
-				<div>
-					<span>Masz pytania? rozliczajka@gmail.com</span>
-				</div>
-			</footer>
-		</div>
-	);
+  return (
+    <footer className="container mx-auto flex justify-between py-6 px-4 shadow-md">
+      <span>Copyright Rozliczajka 2021</span>
+      <span>Masz pytania? rozliczajka@gmail.com</span>
+    </footer>
+  );
 };
 
 export default Footer;

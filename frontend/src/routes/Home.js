@@ -1,10 +1,10 @@
-import Jumbotron from "../components/Jumbotron";
+import Hero from "../components/Hero";
 import img from "./assets/people.png";
 
 const Home = () => {
   return (
     <section>
-      <Jumbotron img={img} />
+      <Hero img={img} />
     </section>
   );
 };
