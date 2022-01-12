@@ -1,16 +1,19 @@
-import Navbar from './Navbar';
-import Jumbotron from './Jumbotron';
-import Footer from './Footer';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import Home from "./routes/Home";
+import "./App.css";
 
 const App = () => {
-	return (
-		<div className='App'>
-			<Navbar />
-			<Jumbotron />
-			<Footer />
-		</div>
-	);
+  return (
+    <Router basename={process.env.PUBLIC_URL}>
+      <Navbar />
+      <Routes>
+        <Route path="/" element=<Home /> />
+      </Routes>
+      <Footer />
+    </Router>
+  );
 };
 
 export default App;

@@ -15,5 +15,12 @@
   "bugs": {
     "url": "https://github.com/nazarpechka/rozliczajka/issues"
   },
-  "homepage": "https://github.com/nazarpechka/rozliczajka#readme"
+  "homepage": "https://github.com/nazarpechka/rozliczajka#readme",
+  "devDependencies": {
+    "eslint": "^8.6.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.28.0",
+    "prettier": "^2.5.1"
+  }
 }
