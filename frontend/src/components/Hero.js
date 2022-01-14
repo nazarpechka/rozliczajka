@@ -1,15 +1,24 @@
+import Nav from "../components/Nav";
+
 const Hero = ({ img }) => {
   return (
-    <section className="container mx-auto flex items-center p-8 mb-16 relative bg-gradient-to-r from-orange-500 to-primary text-white">
-      <div>
-        <h2 className="text-8xl">Twoja aplikacja do rozliczania</h2>
-        <p className="mt-2 text-lg text-gray-100">
-          Jedyna w swoim rodzaju aplikacja, służąca do rozliczania dla każdego,
-          kto wyrusza w podróż z Green Tour. Załóż konto już dziś i korzystaj ze
-          wszystkich możliwośći Rozliczajki.{" "}
-        </p>
+    <section className="bg-gradient-to-tr from-orange-500 to-primary relative mb-16">
+      <div className="container mx-auto flex flex-col items-center gap-16 pb-32 text-white">
+        <Nav />
+        <div className="flex items-center">
+          <div>
+            <h2 className="text-8xl font-light">
+              Twoja aplikacja do rozliczania
+            </h2>
+            <p className="mt-10 text-lg text-gray-100">
+              Jedyna w swoim rodzaju aplikacja, służąca do rozliczania dla
+              każdego, kto wyrusza w podróż z Green Tour. Załóż konto już dziś i
+              korzystaj ze wszystkich możliwośći Rozliczajki.{" "}
+            </p>
+          </div>
+          <img src={img} className="w-1/2" alt="" />
+        </div>
       </div>
-      <img src={img} className="w-1/2" alt="" />
       <div className="custom-shape-divider-bottom-1642021370">
         <svg
           data-name="Layer 1"

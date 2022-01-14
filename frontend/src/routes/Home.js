@@ -1,12 +1,8 @@
 import Hero from "../components/Hero";
-import img from "./assets/people.png";
+import img from "./assets/people3.png";
 
 const Home = () => {
-  return (
-    <section>
-      <Hero img={img} />
-    </section>
-  );
+  return <Hero img={img} />;
 };
 
 export default Home;
