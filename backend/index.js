@@ -15,6 +15,13 @@ const MONGODB_URL =
 mongoose.connect(MONGODB_URL);
 
 app.use(cors());
+app.use(function (req, res, next) {
+  res.header(
+    "Access-Control-Allow-Headers",
+    "x-access-token, Origin, Content-Type, Accept"
+  );
+  next();
+});
 
 router.route("/").get((_, res) => {
   res.send("Welcome to Rozliczajka API");

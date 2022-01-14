@@ -1,5 +1,6 @@
 import Nav from "../components/Nav";
-import img from "../assets/people3.png";
+import img from "../assets/people.png";
+import "./Home.css";
 
 const Home = () => {
   return (

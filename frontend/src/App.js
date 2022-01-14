@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Footer from "./components/Footer";
 import Home from "./routes/Home";
@@ -7,6 +8,8 @@ import Groups from "./routes/Groups";
 import NotFound from "./routes/NotFound";
 
 const App = () => {
+  const [user, setUser] = useState();
+
   return (
     <Router basename={process.env.PUBLIC_URL}>
       <Routes>
