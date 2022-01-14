@@ -26,4 +26,16 @@ module.exports = {
         }
       });
   },
+
+  login: (req, res) => {
+      UserModel.findOne({login: req.body.login, password: req.body.password}, (err, user) => {
+        if (err) {
+          res.send(err);
+        } else if(!user) {
+            res.status(404).send(user);
+          } else{
+          res.status(200).send(user);
+        }
+      });
+  }
 };

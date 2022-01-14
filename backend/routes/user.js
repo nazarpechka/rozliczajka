@@ -1,4 +1,4 @@
-const { createUser, getGroups } = require('../controllers/user');
+const { createUser, getGroups, login } = require('../controllers/user');
 
 module.exports = (router) => {
   router.route('/user')
@@ -6,4 +6,7 @@ module.exports = (router) => {
 
   router.route('/user/:id/groups')
     .get(getGroups)
+
+  router.route('/user/sign-up')
+    .get(login) 
 };
