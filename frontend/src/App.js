@@ -9,16 +9,18 @@ import Groups from "./routes/Groups";
 import NotFound from "./routes/NotFound";
 
 const App = () => {
-  const [user, setUser] = useState();
+  const [user, setUser] = useState(localStorage.getItem("user") || {});
   const navigate = useNavigate();
 
   const onLogin = (user) => {
     setUser(user);
+    localStorage.setItem("user", user);
     navigate("/");
   };
 
   const onLogout = () => {
     setUser();
+    localStorage.removeItem("user");
     navigate("/");
   };
 
