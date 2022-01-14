@@ -1,5 +1,5 @@
 import Hero from "../components/Hero";
-import img from "./assets/people3.png";
+import img from "../assets/people3.png";
 
 const Home = () => {
   return <Hero img={img} />;
