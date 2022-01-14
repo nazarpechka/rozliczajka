@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import cx from "classnames";
 
-const Nav = (props) => {
+const Nav = ({ className, isLoggedIn }) => {
   const location = useLocation();
   const navigation = [
     {
@@ -22,18 +22,18 @@ const Nav = (props) => {
     },
     {
       label: "Wyloguj się",
-      url: "/",
+      url: "/logout",
     },
   ];
 
   return (
-    <nav className={cx(props.className, "w-full py-6")}>
+    <nav className={cx(className, "w-full py-6")}>
       <div className="container mx-auto flex justify-between items-center">
         <h1 className="text-2xl hover:scale-105 transition duration-150">
           <Link to="/">Rozliczajka</Link>
         </h1>
         <ul className="flex gap-6">
-          {props.isUserLoggedIn ? (
+          {isLoggedIn ? (
             <>
               {navigation.map(({ url, label }) => (
                 <li

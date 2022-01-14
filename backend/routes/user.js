@@ -6,5 +6,5 @@ module.exports = (router) => {
 
   router.route("/user/signup").post(createUser);
 
-  router.route("/user/login").get(login);
+  router.route("/user/login").post(login);
 };

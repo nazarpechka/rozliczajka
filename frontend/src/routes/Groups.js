@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Nav from "../components/Nav";
 import GroupCard from "../components/GroupCard";
 
-const Groups = () => {
+const Groups = ({ user }) => {
   const [groups, setGroups] = useState([]);
 
   useEffect(() => {
@@ -21,7 +21,7 @@ const Groups = () => {
 
   return (
     <div>
-      <Nav isUserLoggedIn={true} className="shadow-md shadow-orange-500/25" />
+      <Nav isLoggedIn={user} className="shadow-md shadow-orange-500/25" />
       <h1 className="container mx-auto text-4xl font-medium mb-11 mt-10">
         Grupy, do których jesteś dodany
       </h1>

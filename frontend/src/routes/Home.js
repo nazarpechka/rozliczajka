@@ -2,11 +2,11 @@ import Nav from "../components/Nav";
 import img from "../assets/people.png";
 import "./Home.css";
 
-const Home = () => {
+const Home = ({ user }) => {
   return (
     <section className="bg-gradient-to-tr from-orange-500 to-primary relative mb-16">
       <div className="container mx-auto flex flex-col items-center gap-16 pb-32 text-white">
-        <Nav />
+        <Nav isLoggedIn={user} />
         <div className="flex items-center">
           <div>
             <h2 className="text-8xl font-light">

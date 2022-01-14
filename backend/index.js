@@ -8,7 +8,7 @@ const setRoutes = require("./routes/index");
 const router = express.Router();
 const app = express();
 
-const PORT = 3000;
+const PORT = 4000;
 const MONGODB_URL =
   "mongodb+srv://rozliczajka:Rozliczajka2022@cluster0.o33dn.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 
