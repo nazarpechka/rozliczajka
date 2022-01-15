@@ -9,7 +9,7 @@ const Groups = ({ user }) => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:4000/user/groups`, {
+      .get(`/user/groups`, {
         headers: {
           "x-access-token": user.token,
         },
