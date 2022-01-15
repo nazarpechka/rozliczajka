@@ -4,9 +4,9 @@
   "description": "Appliaction to track group expenses",
   "main": "index.js",
   "scripts": {
-    "backend": "npm start --prefix backend",
-    "frontend": "npm start --prefix frontend",
-    "start": "concurrently \"npm run backend\" \"npm run frontend\""
+    "dev": "concurrently \"npm run dev --prefix backend\" \"npm start --prefix frontend\"",
+    "start": "cd backend && npm install && npm start",
+    "heroku-postbuild": "cd frontend && npm install && npm run build"
   },
   "repository": {
     "type": "git",
