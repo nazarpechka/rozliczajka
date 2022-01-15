@@ -1,9 +1,18 @@
-import { Link, useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import cx from "classnames";
 
 const Nav = ({ className, isLoggedIn }) => {
-  const location = useLocation();
-  const navigation = [
+  const navigationNotLoggedIn = [
+    {
+      label: "Zaloguj się",
+      url: "/login",
+    },
+    {
+      label: "Zarejestruj się",
+      url: "/signup",
+    },
+  ];
+  const navigationLoggedIn = [
     {
       label: "Moje Grupy",
       url: "/groups",
@@ -26,36 +35,30 @@ const Nav = ({ className, isLoggedIn }) => {
     },
   ];
 
+  const navigation = isLoggedIn ? navigationLoggedIn : navigationNotLoggedIn;
+
   return (
     <nav className={cx(className, "w-full py-6")}>
       <div className="container mx-auto flex justify-between items-center">
         <h1 className="text-2xl hover:scale-105 transition duration-150">
-          <Link to="/">Rozliczajka</Link>
+          <NavLink to="/">Rozliczajka</NavLink>
         </h1>
         <ul className="flex gap-6">
-          {isLoggedIn ? (
-            <>
-              {navigation.map(({ url, label }) => (
-                <li
-                  className={cx({
-                    ["text-orange-500"]: location.pathname === url,
-                  })}
-                  key={label}
-                >
-                  <Link to={url}>{label}</Link>
-                </li>
-              ))}
-            </>
-          ) : (
-            <>
-              <li className="border border-white hover:bg-white hover:text-primary px-4 py-2 rounded-md transition duration-150 text-lg">
-                <Link to="/login">Zaloguj się</Link>
-              </li>
-              <li className="border border-white hover:bg-white hover:text-primary px-4 py-2 rounded-md transition duration-150 text-lg">
-                <Link to="/signup">Zarejestruj się</Link>
-              </li>
-            </>
-          )}
+          {navigation.map(({ url, label }) => (
+            <li key={label}>
+              <NavLink
+                to={url}
+                className={({ isActive }) =>
+                  (isActive ? "text-orange-500" : "") +
+                  (!isLoggedIn
+                    ? "border border-white hover:bg-white hover:text-primary px-4 py-2 rounded-md transition duration-150 text-lg"
+                    : "")
+                }
+              >
+                {label}
+              </NavLink>
+            </li>
+          ))}
         </ul>
       </div>
     </nav>
