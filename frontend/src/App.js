@@ -7,6 +7,9 @@ import Login from "./routes/Login";
 import Logout from "./routes/Logout";
 import Groups from "./routes/Groups";
 import NotFound from "./routes/NotFound";
+import Expenses from "./routes/Expenses";
+import Debts from "./routes/Debts";
+import Confirmations from "./routes/Confirmations";
 
 const App = () => {
   const [user, setUser] = useState(localStorage.getItem("user") || {});
@@ -15,7 +18,7 @@ const App = () => {
   const onLogin = (user) => {
     setUser(user);
     localStorage.setItem("user", user);
-    navigate("/my-groups");
+    navigate("/groups");
   };
 
   const onLogout = () => {
@@ -32,7 +35,10 @@ const App = () => {
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login onLogin={onLogin} />} />
           <Route path="/logout" element={<Logout onLogout={onLogout} />} />
-          <Route path="/my-groups" element={<Groups user={user} />} />
+          <Route path="/groups" element={<Groups user={user} />} />
+          <Route path="/expenses" element={<Expenses user={user} />} />
+          <Route path="/debts" element={<Debts user={user} />} />
+          <Route path="/confirmations" element={<Confirmations user={user} />} />
           <Route path="*" status={404} element={<NotFound />} />
         </Routes>
       </div>

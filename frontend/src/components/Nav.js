@@ -6,19 +6,19 @@ const Nav = ({ className, isLoggedIn }) => {
   const navigation = [
     {
       label: "Moje Grupy",
-      url: "/my-groups",
+      url: "/groups",
     },
     {
       label: "Wydatki",
-      url: "/",
+      url: "/expenses",
     },
     {
       label: "Długi",
-      url: "/",
+      url: "/debts",
     },
     {
       label: "Potwierdzenia",
-      url: "/",
+      url: "/confirmations",
     },
     {
       label: "Wyloguj się",

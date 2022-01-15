@@ -8,7 +8,6 @@ const Groups = ({ user }) => {
   const [groups, setGroups] = useState([]);
 
   useEffect(() => {
-    const userId = "61dc8d259f101ba1de7793d5";
     axios
       .get(`http://localhost:4000/user/groups`, {
         headers: {
