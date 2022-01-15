@@ -52,7 +52,7 @@ const Login = ({ onLogin }) => {
           <Input
             label="Password"
             name="password"
-            type="text"
+            type="password"
             placeholder="Your password"
             innerRef={password}
           />

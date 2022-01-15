@@ -24,13 +24,13 @@ const Signup = () => {
           <Input
             label="Password"
             name="password"
-            type="text"
+            type="password"
             placeholder="Your password"
           />
           <Input
             label="Repeat password"
             name="passwordRepeat"
-            type="text"
+            type="password"
             placeholder="Repeat password"
           />
           <Input label="Imie" name="name" type="text" placeholder="Imie" />

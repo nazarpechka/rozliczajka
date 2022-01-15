@@ -15,7 +15,7 @@ const App = () => {
   const onLogin = (user) => {
     setUser(user);
     localStorage.setItem("user", user);
-    navigate("/");
+    navigate("/my-groups");
   };
 
   const onLogout = () => {
@@ -25,15 +25,17 @@ const App = () => {
   };
 
   return (
-    <div>
-      <Routes>
-        <Route path="/" element={<Home user={user} />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login onLogin={onLogin} />} />
-        <Route path="/logout" element={<Logout onLogout={onLogout} />} />
-        <Route path="/my-groups" element={<Groups user={user} />} />
-        <Route path="*" status={404} element={<NotFound />} />
-      </Routes>
+    <div className="h-screen flex flex-col">
+      <div className="flex-1">
+        <Routes>
+          <Route path="/" element={<Home user={user} />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login onLogin={onLogin} />} />
+          <Route path="/logout" element={<Logout onLogout={onLogout} />} />
+          <Route path="/my-groups" element={<Groups user={user} />} />
+          <Route path="*" status={404} element={<NotFound />} />
+        </Routes>
+      </div>
       <Footer />
     </div>
   );

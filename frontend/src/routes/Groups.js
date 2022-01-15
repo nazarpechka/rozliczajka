@@ -10,7 +10,11 @@ const Groups = ({ user }) => {
   useEffect(() => {
     const userId = "61dc8d259f101ba1de7793d5";
     axios
-      .get(`http://localhost:3000/user/${userId}/groups`)
+      .get(`http://localhost:4000/user/groups`, {
+        headers: {
+          'x-access-token': user.token
+        }
+      })
       .then(({ data }) => {
         setGroups(data);
       })
