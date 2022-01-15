@@ -3,7 +3,7 @@ import { useState, useEffect, useContext } from "react";
 
 import Nav from "../components/Nav";
 import GroupCard from "../components/GroupCard";
-import UserContext from "../context/UserContext";
+import UserContext from "../contexts/UserContext";
 
 const Groups = () => {
   const { user } = useContext(UserContext);

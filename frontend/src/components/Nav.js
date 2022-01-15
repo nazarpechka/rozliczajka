@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import cx from "classnames";
 
-import UserContext from "../context/UserContext";
+import UserContext from "../contexts/UserContext";
 
 const Nav = ({ className, isLoggedIn }) => {
   const { user } = useContext(UserContext);

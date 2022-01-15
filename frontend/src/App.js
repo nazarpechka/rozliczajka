@@ -10,7 +10,7 @@ import NotFound from "./routes/NotFound";
 import Expenses from "./routes/Expenses";
 import Debts from "./routes/Debts";
 import Confirmations from "./routes/Confirmations";
-import UserContext from "./context/UserContext";
+import UserContext from "./contexts/UserContext";
 
 const App = () => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));

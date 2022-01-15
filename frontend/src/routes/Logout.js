@@ -1,5 +1,5 @@
 import { useEffect, useContext } from "react";
-import UserContext from "../context/UserContext";
+import UserContext from "../contexts/UserContext";
 
 const Logout = () => {
   const { onLogout } = useContext(UserContext);
