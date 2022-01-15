@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useRef } from "react";
 import { Link } from "react-router-dom";
 import Nav from "../components/Nav";
@@ -9,31 +10,25 @@ const Login = ({ onLogin }) => {
   const password = useRef();
 
   const onClick = async (e) => {
-    console.log(
-      JSON.stringify({
-        login: login.current.value,
-        password: password.current.value,
-      })
-    );
-    const data = await fetch("http://localhost:4000/user/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        login: login.current.value,
-        password: password.current.value,
-      }),
-    });
-    const json = await data.json();
-
     const error = document.querySelector("#error");
-    if (!json.user) {
-      error.textContent = json.message;
-    } else {
-      error.textContent = "";
-      onLogin(json.user, json.token);
-    }
+    const data = {
+      login: login.current.value,
+      password: password.current.value,
+    };
+
+    axios
+      .post("http://localhost:4000/user/login", data)
+      .then(({ data }) => {
+        if (!data.user) {
+          error.textContent = data.message;
+        } else {
+          error.textContent = "";
+          onLogin(data.user);
+        }
+      })
+      .catch((err) => {
+        error.textContent = err.response.data.message;
+      });
   };
 
   return (
