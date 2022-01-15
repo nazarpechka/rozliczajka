@@ -56,7 +56,7 @@ module.exports = {
         res.status(200).send({
           message: "Logged in",
           user: {
-            ...user,
+            ...user.toObject(),
             token,
           },
         });

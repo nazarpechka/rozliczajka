@@ -12,12 +12,12 @@ import Debts from "./routes/Debts";
 import Confirmations from "./routes/Confirmations";
 
 const App = () => {
-  const [user, setUser] = useState(localStorage.getItem("user") || {});
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
   const navigate = useNavigate();
 
   const onLogin = (user) => {
     setUser(user);
-    localStorage.setItem("user", user);
+    localStorage.setItem("user", JSON.stringify(user));
     navigate("/groups");
   };
 
@@ -38,7 +38,10 @@ const App = () => {
           <Route path="/groups" element={<Groups user={user} />} />
           <Route path="/expenses" element={<Expenses user={user} />} />
           <Route path="/debts" element={<Debts user={user} />} />
-          <Route path="/confirmations" element={<Confirmations user={user} />} />
+          <Route
+            path="/confirmations"
+            element={<Confirmations user={user} />}
+          />
           <Route path="*" status={404} element={<NotFound />} />
         </Routes>
       </div>
