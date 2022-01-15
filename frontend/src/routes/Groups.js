@@ -11,8 +11,8 @@ const Groups = ({ user }) => {
     axios
       .get(`http://localhost:4000/user/groups`, {
         headers: {
-          'x-access-token': user.token
-        }
+          "x-access-token": user.token,
+        },
       })
       .then(({ data }) => {
         setGroups(data);
