@@ -1,7 +1,11 @@
+import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import cx from "classnames";
 
+import UserContext from "../context/UserContext";
+
 const Nav = ({ className, isLoggedIn }) => {
+  const { user } = useContext(UserContext);
   const navigationNotLoggedIn = [
     {
       label: "Zaloguj się",
@@ -35,7 +39,7 @@ const Nav = ({ className, isLoggedIn }) => {
     },
   ];
 
-  const navigation = isLoggedIn ? navigationLoggedIn : navigationNotLoggedIn;
+  const navigation = user ? navigationLoggedIn : navigationNotLoggedIn;
 
   return (
     <nav className={cx(className, "w-full py-6")}>
@@ -49,8 +53,8 @@ const Nav = ({ className, isLoggedIn }) => {
               <NavLink
                 to={url}
                 className={({ isActive }) =>
-                  (isActive ? "text-orange-500" : "") +
-                  (!isLoggedIn
+                  (isActive ? "text-primary" : "") +
+                  (!user
                     ? "border border-white hover:bg-white hover:text-primary px-4 py-2 rounded-md transition duration-150 text-lg"
                     : "")
                 }

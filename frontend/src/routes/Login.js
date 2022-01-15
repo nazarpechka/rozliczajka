@@ -1,11 +1,13 @@
 import axios from "axios";
-import { useRef } from "react";
+import { useRef, useContext } from "react";
 import { Link } from "react-router-dom";
 import Nav from "../components/Nav";
 import Input from "../components/Input";
 import Button from "../components/Button";
+import UserContext from "../context/UserContext";
 
-const Login = ({ onLogin }) => {
+const Login = () => {
+  const { onLogin } = useContext(UserContext);
   const login = useRef();
   const password = useRef();
 

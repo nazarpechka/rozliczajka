@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { React, useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Footer from "./components/Footer";
 import Home from "./routes/Home";
@@ -10,6 +10,7 @@ import NotFound from "./routes/NotFound";
 import Expenses from "./routes/Expenses";
 import Debts from "./routes/Debts";
 import Confirmations from "./routes/Confirmations";
+import UserContext from "./context/UserContext";
 
 const App = () => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
@@ -28,25 +29,24 @@ const App = () => {
   };
 
   return (
-    <div className="h-screen flex flex-col">
-      <div className="flex-1">
-        <Routes>
-          <Route path="/" element={<Home user={user} />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/login" element={<Login onLogin={onLogin} />} />
-          <Route path="/logout" element={<Logout onLogout={onLogout} />} />
-          <Route path="/groups" element={<Groups user={user} />} />
-          <Route path="/expenses" element={<Expenses user={user} />} />
-          <Route path="/debts" element={<Debts user={user} />} />
-          <Route
-            path="/confirmations"
-            element={<Confirmations user={user} />}
-          />
-          <Route path="*" status={404} element={<NotFound />} />
-        </Routes>
+    <UserContext.Provider value={{ user, onLogin, onLogout }}>
+      <div className="h-screen flex flex-col">
+        <div className="flex-1">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/logout" element={<Logout />} />
+            <Route path="/groups" element={<Groups />} />
+            <Route path="/expenses" element={<Expenses />} />
+            <Route path="/debts" element={<Debts />} />
+            <Route path="/confirmations" element={<Confirmations />} />
+            <Route path="*" status={404} element={<NotFound />} />
+          </Routes>
+        </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
+    </UserContext.Provider>
   );
 };
 
