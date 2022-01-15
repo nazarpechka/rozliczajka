@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -14,8 +15,10 @@ const MONGODB_URL =
 
 mongoose.connect(MONGODB_URL);
 
+app.use(bodyParser.json());
 app.use(cors());
-app.use(function (req, res, next) {
+
+app.use("/api", function (req, res, next) {
   res.header(
     "Access-Control-Allow-Headers",
     "x-access-token, Origin, Content-Type, Accept"
@@ -23,12 +26,13 @@ app.use(function (req, res, next) {
   next();
 });
 
-router.route("/").get((_, res) => {
-  res.send("Welcome to Rozliczajka API");
+app.use(express.static(path.join(__dirname, "../frontend/build/")));
+
+app.use("/api", setRoutes(router));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/build/", "index.html"));
 });
 
-app.use(bodyParser.json());
-app.use(setRoutes(router));
-app.listen(process.env.PORT || PORT, () => {
-  console.log(`Rozliczajka API is running on ${PORT} port`);
+app.listen(PORT, () => {
+  console.log(`Rozliczajka is running on ${PORT} port`);
 });

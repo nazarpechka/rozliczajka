@@ -17,7 +17,7 @@ const Login = ({ onLogin }) => {
     };
 
     axios
-      .post("/user/login", data)
+      .post("/api/user/login", data)
       .then(({ data }) => {
         if (!data.user) {
           error.textContent = data.message;

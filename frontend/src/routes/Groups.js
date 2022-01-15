@@ -9,7 +9,7 @@ const Groups = ({ user }) => {
 
   useEffect(() => {
     axios
-      .get(`/user/groups`, {
+      .get(`/api/user/groups`, {
         headers: {
           "x-access-token": user.token,
         },
