@@ -12,6 +12,7 @@ import Expenses from "./routes/Expenses";
 import Debts from "./routes/Debts";
 import Confirmations from "./routes/Confirmations";
 import UserContext from "./contexts/UserContext";
+import RequireAuth from "./routes/RequireAuth";
 
 const App = () => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
@@ -44,11 +45,46 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/logout" element={<Logout />} />
-            <Route path="/groups" element={<Groups />} />
-            <Route path="/expenses" element={<Expenses />} />
-            <Route path="/debts" element={<Debts />} />
-            <Route path="/confirmations" element={<Confirmations />} />
+            <Route
+              path="/logout"
+              element={
+                <RequireAuth>
+                  <Logout />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/groups"
+              element={
+                <RequireAuth>
+                  <Groups />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/expenses"
+              element={
+                <RequireAuth>
+                  <Expenses />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/debts"
+              element={
+                <RequireAuth>
+                  <Debts />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/confirmations"
+              element={
+                <RequireAuth>
+                  <Confirmations />
+                </RequireAuth>
+              }
+            />
             <Route path="*" status={404} element={<NotFound />} />
           </Routes>
         </main>
