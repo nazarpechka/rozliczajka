@@ -6,6 +6,10 @@ module.exports = {
         primary: "#FFA200",
       },
     },
+    fontFamily: {
+      sans: ["Roboto", "Helvetica", "Arial", "sans-serif"],
+      serif: ["Merriweather", "serif"],
+    },
   },
   plugins: [require("@tailwindcss/forms")],
 };
