@@ -1,10 +1,8 @@
 const Confirmations = () => {
   return (
-    <div>
-      <h1 className="text-center text-4xl font-medium mb-11 mt-10">
-        Your confirmations
-      </h1>
-    </div>
+    <section className="container mx-auto my-8">
+      <h1 className="text-4xl font-medium">Twoje potwierdzenia</h1>
+    </section>
   );
 };
 export default Confirmations;

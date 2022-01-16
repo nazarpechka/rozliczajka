@@ -7,8 +7,8 @@ const Logout = () => {
   useEffect(onLogout, [onLogout]);
 
   return (
-    <section className="container mx-auto flex justify-center py-8">
-      <h2 className="text-4xl font-bold">Logged out</h2>
+    <section className="container mx-auto flex flex-col items-center my-8">
+      <h2 className="text-4xl font-medium">Logged out</h2>
     </section>
   );
 };

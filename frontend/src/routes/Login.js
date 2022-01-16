@@ -44,9 +44,9 @@ const Login = () => {
 
   return (
     <div>
-      <section className="container mx-auto my-8 flex flex-col items-center px-96">
-        <h1 className="text-4xl font-medium mb-11 mt-10">Logowanie</h1>
-        <form className="w-full" onSubmit={onSubmit}>
+      <section className="container mx-auto flex flex-col items-center my-8">
+        <h1 className="text-4xl font-medium">Logowanie</h1>
+        <form className="w-1/2" onSubmit={onSubmit}>
           <Input
             label="Login"
             name="login"
@@ -63,14 +63,16 @@ const Login = () => {
             value={formData.password}
             onChange={onChange}
           />
-          <span className="block text-lg text-red-500" id="error"></span>
-          <Button label="Zaloguj" />
-          <span className="block mt-4">
-            Nie posiadasz konta?
-            <Link to="/signup" className="text-primary">
-              Zarejestruj się
-            </Link>
-          </span>
+          <span className="block text-lg text-red-500 mt-8" id="error"></span>
+          <div className="flex justify-between items-center">
+            <Button label="Zaloguj" />
+            <span className="block">
+              Nie posiadasz konta?
+              <Link to="/signup" className="block text-primary">
+                Zarejestruj się
+              </Link>
+            </span>
+          </div>
         </form>
       </section>
     </div>

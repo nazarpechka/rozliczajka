@@ -8,7 +8,7 @@ const Home = () => {
           <h2 className="text-8xl font-light">
             Twoja aplikacja do rozliczania
           </h2>
-          <p className="mt-10 text-lg text-gray-100">
+          <p className="mt-8 text-lg text-gray-100">
             Jedyna w swoim rodzaju aplikacja, służąca do rozliczania dla
             każdego, kto wyrusza w podróż z Green Tour. Załóż konto już dziś i
             korzystaj ze wszystkich możliwośći Rozliczajki.

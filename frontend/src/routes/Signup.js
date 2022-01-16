@@ -48,9 +48,9 @@ const Signup = () => {
   };
 
   return (
-    <section className="container mx-auto my-8 px-96 flex flex-col items-center">
-      <h1 className="text-4xl font-medium mb-8">Rejestracja</h1>
-      <form className="w-full" onSubmit={onSubmit}>
+    <section className="container mx-auto flex flex-col items-center my-8">
+      <h1 className="text-4xl font-medium">Rejestracja</h1>
+      <form className="w-1/2" onSubmit={onSubmit}>
         <Input
           label="Login"
           name="login"
@@ -106,8 +106,8 @@ const Signup = () => {
           value={formData.birthDate}
           onChange={onChange}
         />
-        <span className="block text-lg text-red-500" id="error"></span>
-        <span className="block text-lg text-green-500" id="success"></span>
+        <span className="block text-lg text-red-500 mt-8" id="error"></span>
+        <span className="block text-lg text-green-500 mt-8" id="success"></span>
         <Button label="Zarejestruj" />
       </form>
     </section>

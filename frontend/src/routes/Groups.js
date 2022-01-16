@@ -24,20 +24,12 @@ const Groups = () => {
   }, [user.token]);
 
   return (
-    <div>
-      <h1 className="container mx-auto text-4xl font-medium mb-11 mt-10">
-        Grupy, do których jesteś dodany
-      </h1>
+    <section className="container mx-auto my-8">
+      <h1 className="text-4xl font-medium">Grupy, do których jesteś dodany</h1>
       {groups.map((group) => (
-        <GroupCard
-          key={group._id}
-          name={group.name}
-          creationDate={group.creationDate}
-          manager={group.manager}
-          participants={group.participants}
-        />
+        <GroupCard key={group._id} group={group} />
       ))}
-    </div>
+    </section>
   );
 };
 
