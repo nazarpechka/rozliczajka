@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useRef, useContext } from "react";
+import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import Input from "../components/Input";
 import Button from "../components/Button";
@@ -7,23 +7,33 @@ import UserContext from "../contexts/UserContext";
 
 const Login = () => {
   const { onLogin } = useContext(UserContext);
-  const login = useRef();
-  const password = useRef();
+  const [formData, setFormData] = useState({
+    login: "",
+    password: "",
+  });
 
-  const onClick = async (e) => {
+  const onChange = (e) => {
+    const target = e.target;
+
+    setFormData({
+      ...formData,
+      [target.name]: target.value,
+    });
+
+    console.log(formData);
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
     const error = document.querySelector("#error");
-    const data = {
-      login: login.current.value,
-      password: password.current.value,
-    };
+    error.textContent = "";
 
     axios
-      .post("/api/user/login", data)
+      .post("/api/user/login", formData)
       .then(({ data }) => {
         if (!data.user) {
           error.textContent = data.message;
         } else {
-          error.textContent = "";
           onLogin(data.user);
         }
       })
@@ -36,25 +46,27 @@ const Login = () => {
     <div>
       <section className="container mx-auto my-8 flex flex-col items-center px-96">
         <h1 className="text-4xl font-medium mb-11 mt-10">Logowanie</h1>
-        <form className="w-full" onSubmit={(e) => e.preventDefault()}>
+        <form className="w-full" onSubmit={onSubmit}>
           <Input
             label="Login"
             name="login"
             type="text"
             placeholder="Your login"
-            innerRef={login}
+            value={formData.login}
+            onChange={onChange}
           />
           <Input
             label="Password"
             name="password"
             type="password"
             placeholder="Your password"
-            innerRef={password}
+            value={formData.password}
+            onChange={onChange}
           />
           <span className="block text-lg text-red-500" id="error"></span>
-          <Button label="Zaloguj" onClick={onClick} />
+          <Button label="Zaloguj" />
           <span className="block mt-4">
-            Nie posiadasz konta?{" "}
+            Nie posiadasz konta?
             <Link to="/signup" className="text-primary">
               Zarejestruj się
             </Link>

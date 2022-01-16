@@ -1,53 +1,116 @@
+import axios from "axios";
+import { useState } from "react";
 import Input from "../components/Input";
 import Button from "../components/Button";
 
 const Signup = () => {
+  const [formData, setFormData] = useState({
+    login: "",
+    email: "",
+    password: "",
+    passwordRepeat: "",
+    name: "",
+    surname: "",
+    birthDate: new Date().toISOString().substr(0, 10),
+  });
+
+  const onChange = (e) => {
+    const target = e.target;
+
+    setFormData({
+      ...formData,
+      [target.name]: target.value,
+    });
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    const error = document.querySelector("#error");
+    const success = document.querySelector("#success");
+    error.textContent = "";
+    success.textContent = "";
+
+    if (formData.password !== formData.passwordRepeat) {
+      error.textContent = "Passwords dont match!";
+      return;
+    }
+
+    const { passwordRepeat: dummy, ...data } = formData;
+
+    axios
+      .post("/api/user/signup", data)
+      .then(({ data }) => {
+        success.textContent = "Successfully registered! You can now log in.";
+      })
+      .catch((err) => {
+        error.textContent = err.response.data.message;
+      });
+  };
+
   return (
-    <div>
-      <section className="container mx-auto my-8 flex flex-col items-center px-96">
-        <h1 className="text-4xl font-medium mb-11 mt-10">Rejestracja</h1>
-        <form className="w-full">
-          <Input
-            label="Login"
-            name="login"
-            type="text"
-            placeholder="Your login"
-          />
-          <Input
-            label="E-mail"
-            name="email"
-            type="email"
-            placeholder="Your e-mail"
-          />
-          <Input
-            label="Password"
-            name="password"
-            type="password"
-            placeholder="Your password"
-          />
-          <Input
-            label="Repeat password"
-            name="passwordRepeat"
-            type="password"
-            placeholder="Repeat password"
-          />
-          <Input label="Imie" name="name" type="text" placeholder="Imie" />
-          <Input
-            label="Nazwisko"
-            name="surname"
-            type="text"
-            placeholder="Nazwisko"
-          />
-          <Input
-            label="Data urodzenia"
-            name="birthDate"
-            type="date"
-            value={new Date()}
-          />
-          <Button label="Zarejestruj" />
-        </form>
-      </section>
-    </div>
+    <section className="container mx-auto my-8 px-96 flex flex-col items-center">
+      <h1 className="text-4xl font-medium mb-8">Rejestracja</h1>
+      <form className="w-full" onSubmit={onSubmit}>
+        <Input
+          label="Login"
+          name="login"
+          type="text"
+          placeholder="Your login"
+          value={formData.login}
+          onChange={onChange}
+        />
+        <Input
+          label="E-mail"
+          name="email"
+          type="email"
+          placeholder="Your e-mail"
+          value={formData.email}
+          onChange={onChange}
+        />
+        <Input
+          label="Password"
+          name="password"
+          type="password"
+          placeholder="Your password"
+          value={formData.password}
+          onChange={onChange}
+        />
+        <Input
+          label="Repeat password"
+          name="passwordRepeat"
+          type="password"
+          placeholder="Repeat password"
+          value={formData.passwordRepeat}
+          onChange={onChange}
+        />
+        <Input
+          label="Imie"
+          name="name"
+          type="text"
+          placeholder="Imie"
+          value={formData.name}
+          onChange={onChange}
+        />
+        <Input
+          label="Nazwisko"
+          name="surname"
+          type="text"
+          placeholder="Nazwisko"
+          value={formData.surname}
+          onChange={onChange}
+        />
+        <Input
+          label="Data urodzenia"
+          name="birthDate"
+          type="date"
+          value={formData.birthDate}
+          onChange={onChange}
+        />
+        <span className="block text-lg text-red-500" id="error"></span>
+        <span className="block text-lg text-green-500" id="success"></span>
+        <Button label="Zarejestruj" />
+      </form>
+    </section>
   );
 };
 

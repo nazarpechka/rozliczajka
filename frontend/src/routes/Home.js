@@ -3,20 +3,18 @@ import img from "../assets/people.png";
 const Home = () => {
   return (
     <section className="bg-gradient-to-tr from-orange-500 to-primary relative">
-      <div className="container mx-auto pt-72 pb-48 text-white">
-        <div className="flex items-center">
-          <div>
-            <h2 className="text-8xl font-light">
-              Twoja aplikacja do rozliczania
-            </h2>
-            <p className="mt-10 text-lg text-gray-100">
-              Jedyna w swoim rodzaju aplikacja, służąca do rozliczania dla
-              każdego, kto wyrusza w podróż z Green Tour. Załóż konto już dziś i
-              korzystaj ze wszystkich możliwośći Rozliczajki.
-            </p>
-          </div>
-          <img src={img} className="w-1/2" alt="" />
+      <div className="container mx-auto flex items-center pt-72 pb-48 text-white">
+        <div>
+          <h2 className="text-8xl font-light">
+            Twoja aplikacja do rozliczania
+          </h2>
+          <p className="mt-10 text-lg text-gray-100">
+            Jedyna w swoim rodzaju aplikacja, służąca do rozliczania dla
+            każdego, kto wyrusza w podróż z Green Tour. Załóż konto już dziś i
+            korzystaj ze wszystkich możliwośći Rozliczajki.
+          </p>
         </div>
+        <img src={img} className="w-1/2" alt="" />
       </div>
       <div className="absolute bottom-0 left-0 w-full overflow-hidden rotate-180">
         <svg

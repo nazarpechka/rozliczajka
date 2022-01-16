@@ -9,12 +9,13 @@ module.exports = {
   signup: (req, res) => {
     const user = new UserModel({
       ...req.body,
+      isParticipant: true,
       password: bcrypt.hashSync(req.body.password, 8),
     });
 
     user.save((err, createdUser) => {
       if (err) {
-        res.send(err);
+        res.status(400).send(err);
       } else {
         res.status(200).send(createdUser);
       }

@@ -50,7 +50,7 @@ const Navbar = () => {
   return (
     <header className={cx(className, "w-full py-6")}>
       <nav className="container mx-auto flex justify-between items-center">
-        <h1 className="text-2xl hover:scale-105 transition duration-150">
+        <h1 className="text-3xl hover:scale-105 transition">
           <NavLink to="/">Rozliczajka</NavLink>
         </h1>
         <ul className="flex gap-6">
@@ -59,10 +59,14 @@ const Navbar = () => {
               <NavLink
                 to={url}
                 className={({ isActive }) =>
-                  (isActive ? "text-primary" : "") +
-                  (!user && atHome
-                    ? "border border-white hover:bg-white hover:text-primary px-4 py-2 rounded-md transition duration-150 text-lg"
-                    : "")
+                  cx(
+                    isActive ? "text-primary" : "",
+                    !user && atHome
+                      ? "border border-white hover:bg-white rounded-md"
+                      : "",
+                    user && atHome ? "" : "hover:text-primary ",
+                    "text-lg px-4 py-2 transition"
+                  )
                 }
               >
                 {label}
