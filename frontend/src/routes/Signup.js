@@ -90,7 +90,7 @@ const Signup = () => {
           label="Hasło"
           name="password"
           type="password"
-          placeholder="Twoje hasłow"
+          placeholder="Twoje hasło"
           value={formData.password}
           onChange={onChange}
           invalidMessage="Hasło musi być dłuższe od 6 symbolów."
