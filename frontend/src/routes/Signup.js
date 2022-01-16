@@ -14,8 +14,25 @@ const Signup = () => {
     birthDate: new Date().toISOString().substr(0, 10),
   });
 
+  const validate = (target) => {
+    if (target.name === "password") {
+      if (target.value.length < 6) {
+        target.setCustomValidity("invalid");
+      } else {
+        target.setCustomValidity("");
+      }
+    } else if (target.name === "passwordRepeat") {
+      if (target.value !== formData.password) {
+        target.setCustomValidity("invalid");
+      } else {
+        target.setCustomValidity("");
+      }
+    }
+  };
+
   const onChange = (e) => {
     const target = e.target;
+    validate(target);
 
     setFormData({
       ...formData,
@@ -66,6 +83,7 @@ const Signup = () => {
           placeholder="Your e-mail"
           value={formData.email}
           onChange={onChange}
+          invalidMessage="Please provide a valid email address."
         />
         <Input
           label="Password"
@@ -74,14 +92,16 @@ const Signup = () => {
           placeholder="Your password"
           value={formData.password}
           onChange={onChange}
+          invalidMessage="Password should be atleast 6 characters long."
         />
         <Input
-          label="Repeat password"
+          label="Confirm password"
           name="passwordRepeat"
           type="password"
-          placeholder="Repeat password"
+          placeholder="Your password"
           value={formData.passwordRepeat}
           onChange={onChange}
+          invalidMessage="Passwords don't match."
         />
         <Input
           label="Imie"

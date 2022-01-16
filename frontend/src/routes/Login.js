@@ -63,7 +63,7 @@ const Login = () => {
             value={formData.password}
             onChange={onChange}
           />
-          <span className="block text-lg text-red-500 mt-8" id="error"></span>
+          <span className="block text-lg text-red-500 my-8" id="error"></span>
           <div className="flex justify-between items-center">
             <Button label="Zaloguj" />
             <span className="block">
