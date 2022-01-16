@@ -48,7 +48,7 @@ const Signup = () => {
     success.textContent = "";
 
     if (formData.password !== formData.passwordRepeat) {
-      error.textContent = "Passwords dont match!";
+      error.textContent = "Hasła nie są takie same!";
       return;
     }
 
@@ -57,7 +57,8 @@ const Signup = () => {
     axios
       .post("/api/user/signup", data)
       .then(({ data }) => {
-        success.textContent = "Successfully registered! You can now log in.";
+        success.textContent =
+          "Pomyślnie zarejestrowano! Teraz możesz zalogować się.";
       })
       .catch((err) => {
         error.textContent = err.response.data.message;
@@ -72,7 +73,7 @@ const Signup = () => {
           label="Login"
           name="login"
           type="text"
-          placeholder="Your login"
+          placeholder="Twój login"
           value={formData.login}
           onChange={onChange}
         />
@@ -80,28 +81,28 @@ const Signup = () => {
           label="E-mail"
           name="email"
           type="email"
-          placeholder="Your e-mail"
+          placeholder="Twój email"
           value={formData.email}
           onChange={onChange}
-          invalidMessage="Please provide a valid email address."
+          invalidMessage="Podaj prawidłowy adres email."
         />
         <Input
-          label="Password"
+          label="Hasło"
           name="password"
           type="password"
-          placeholder="Your password"
+          placeholder="Twoje hasłow"
           value={formData.password}
           onChange={onChange}
-          invalidMessage="Password should be atleast 6 characters long."
+          invalidMessage="Hasło musi być dłuższe od 6 symbolów."
         />
         <Input
-          label="Confirm password"
+          label="Potwierdż hasło"
           name="passwordRepeat"
           type="password"
-          placeholder="Your password"
+          placeholder="Hasło ponownie"
           value={formData.passwordRepeat}
           onChange={onChange}
-          invalidMessage="Passwords don't match."
+          invalidMessage="Hasła nie są takie same."
         />
         <Input
           label="Imie"

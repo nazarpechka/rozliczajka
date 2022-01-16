@@ -8,7 +8,7 @@ const Logout = () => {
 
   return (
     <section className="container mx-auto flex flex-col items-center my-8">
-      <h2 className="text-4xl font-medium">Logged out</h2>
+      <h2 className="text-4xl font-medium">Wylogowano</h2>
     </section>
   );
 };

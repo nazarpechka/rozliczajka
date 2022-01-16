@@ -51,15 +51,15 @@ const Login = () => {
             label="Login"
             name="login"
             type="text"
-            placeholder="Your login"
+            placeholder="Twój login"
             value={formData.login}
             onChange={onChange}
           />
           <Input
-            label="Password"
+            label="Hasło"
             name="password"
             type="password"
-            placeholder="Your password"
+            placeholder="Twoje hasło"
             value={formData.password}
             onChange={onChange}
           />
