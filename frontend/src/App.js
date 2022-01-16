@@ -1,5 +1,6 @@
 import { React, useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
+import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./routes/Home";
 import Signup from "./routes/Signup";
@@ -28,10 +29,17 @@ const App = () => {
     navigate("/");
   };
 
+  const value = {
+    user,
+    onLogin,
+    onLogout,
+  };
+
   return (
-    <UserContext.Provider value={{ user, onLogin, onLogout }}>
+    <UserContext.Provider value={value}>
       <div className="h-screen flex flex-col">
-        <div className="flex-1">
+        <Navbar />
+        <main className="flex-1">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/signup" element={<Signup />} />
@@ -43,7 +51,7 @@ const App = () => {
             <Route path="/confirmations" element={<Confirmations />} />
             <Route path="*" status={404} element={<NotFound />} />
           </Routes>
-        </div>
+        </main>
         <Footer />
       </div>
     </UserContext.Provider>

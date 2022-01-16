@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useRef, useContext } from "react";
 import { Link } from "react-router-dom";
-import Nav from "../components/Nav";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import UserContext from "../contexts/UserContext";
@@ -35,7 +34,6 @@ const Login = () => {
 
   return (
     <div>
-      <Nav className="shadow-md shadow-orange-500/25" />
       <section className="container mx-auto my-8 flex flex-col items-center px-96">
         <h1 className="text-4xl font-medium mb-11 mt-10">Logowanie</h1>
         <form className="w-full" onSubmit={(e) => e.preventDefault()}>

@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useState, useEffect, useContext } from "react";
 
-import Nav from "../components/Nav";
 import GroupCard from "../components/GroupCard";
 import UserContext from "../contexts/UserContext";
 
@@ -22,11 +21,10 @@ const Groups = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [user.token]);
 
   return (
     <div>
-      <Nav className="shadow-md shadow-orange-500/25" />
       <h1 className="container mx-auto text-4xl font-medium mb-11 mt-10">
         Grupy, do których jesteś dodany
       </h1>

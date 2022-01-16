@@ -1,11 +1,13 @@
 import { useContext } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import cx from "classnames";
 
 import UserContext from "../contexts/UserContext";
 
-const Nav = ({ className, isLoggedIn }) => {
+const Navbar = () => {
   const { user } = useContext(UserContext);
+  const location = useLocation();
+
   const navigationNotLoggedIn = [
     {
       label: "Zaloguj się",
@@ -40,10 +42,14 @@ const Nav = ({ className, isLoggedIn }) => {
   ];
 
   const navigation = user ? navigationLoggedIn : navigationNotLoggedIn;
+  const atHome = location.pathname === "/";
+  const className = atHome
+    ? "-mb-60 z-10 text-white"
+    : "shadow-md shadow-orange-500/25";
 
   return (
-    <nav className={cx(className, "w-full py-6")}>
-      <div className="container mx-auto flex justify-between items-center">
+    <header className={cx(className, "w-full py-6")}>
+      <nav className="container mx-auto flex justify-between items-center">
         <h1 className="text-2xl hover:scale-105 transition duration-150">
           <NavLink to="/">Rozliczajka</NavLink>
         </h1>
@@ -54,7 +60,7 @@ const Nav = ({ className, isLoggedIn }) => {
                 to={url}
                 className={({ isActive }) =>
                   (isActive ? "text-primary" : "") +
-                  (!user
+                  (!user && atHome
                     ? "border border-white hover:bg-white hover:text-primary px-4 py-2 rounded-md transition duration-150 text-lg"
                     : "")
                 }
@@ -64,9 +70,9 @@ const Nav = ({ className, isLoggedIn }) => {
             </li>
           ))}
         </ul>
-      </div>
-    </nav>
+      </nav>
+    </header>
   );
 };
 
-export default Nav;
+export default Navbar;

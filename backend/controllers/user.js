@@ -6,7 +6,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 module.exports = {
-  createUser: (req, res) => {
+  signup: (req, res) => {
     const user = new UserModel({
       ...req.body,
       password: bcrypt.hashSync(req.body.password, 8),
@@ -22,7 +22,7 @@ module.exports = {
   },
 
   getGroups: (req, res) => {
-    GroupModel.find({ participants: req.body.id })
+    GroupModel.find({ participants: req.id })
       .populate("manager", "name surname")
       .exec((err, groups) => {
         if (err) {

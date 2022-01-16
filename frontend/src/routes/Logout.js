@@ -4,7 +4,7 @@ import UserContext from "../contexts/UserContext";
 const Logout = () => {
   const { onLogout } = useContext(UserContext);
 
-  useEffect(onLogout, []);
+  useEffect(onLogout, [onLogout]);
 
   return (
     <section className="container mx-auto flex justify-center py-8">

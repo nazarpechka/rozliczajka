@@ -1,11 +1,9 @@
-import Nav from "../components/Nav";
 import Input from "../components/Input";
 import Button from "../components/Button";
 
 const Signup = () => {
   return (
     <div>
-      <Nav className="shadow-md shadow-orange-500/25" />
       <section className="container mx-auto my-8 flex flex-col items-center px-96">
         <h1 className="text-4xl font-medium mb-11 mt-10">Rejestracja</h1>
         <form className="w-full">
