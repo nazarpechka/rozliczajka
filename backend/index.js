@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
+const logger = require("morgan");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
@@ -11,20 +12,13 @@ const app = express();
 
 const PORT = process.env.PORT || 4000;
 const MONGODB_URL =
-  "mongodb+srv://rozliczajka:Rozliczajka2022@cluster0.o33dn.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+  "mongodb+srv://rozliczajka:Rozliczajka2022@cluster0.o33dn.mongodb.net/rozliczajka?retryWrites=true&w=majority";
 
 mongoose.connect(MONGODB_URL);
 
+app.use(logger("dev"));
 app.use(bodyParser.json());
 app.use(cors());
-
-app.use("/api", function (req, res, next) {
-  res.header(
-    "Access-Control-Allow-Headers",
-    "x-access-token, Origin, Content-Type, Accept"
-  );
-  next();
-});
 
 app.use(express.static(path.join(__dirname, "../frontend/build/")));
 

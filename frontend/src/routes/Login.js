@@ -19,8 +19,6 @@ const Login = () => {
       ...formData,
       [target.name]: target.value,
     });
-
-    console.log(formData);
   };
 
   const onSubmit = async (e) => {

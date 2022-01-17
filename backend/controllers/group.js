@@ -19,7 +19,7 @@ module.exports = {
           message: "Manager user not found!",
         });
       } else if (user.isParticipant) {
-        res.status(400).send("Provided user is not a manager!");
+        res.status(400).send({ message: "Provided user is not a manager!" });
       } else {
         group.save((err, createdGroup) => {
           if (err) {
@@ -82,7 +82,9 @@ module.exports = {
       } else if (!group.participants.includes(req.body.userId)) {
         res
           .status(400)
-          .send("There is no participant in this group with the given id");
+          .send({
+            message: "There is no participant in this group with the given id",
+          });
       } else {
         const updatedParticipants = group.participants.filter(
           (participant) => participant.toString() !== req.body.userId
