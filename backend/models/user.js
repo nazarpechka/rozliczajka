@@ -6,16 +6,19 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     maxLength: 32,
+    trim: true,
     unique: true,
   },
   password: {
     type: String,
     required: true,
+    trim: true,
     maxLength: 64,
   },
   email: {
     type: String,
     required: true,
+    trim: true,
     maxLength: 32,
     validate: {
       validator: isEmail,
@@ -26,11 +29,13 @@ const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
+    trim: true,
     maxLength: 32,
   },
   surname: {
     type: String,
     required: true,
+    trim: true,
     maxLength: 32,
   },
   birthDate: {
@@ -47,13 +52,16 @@ const userSchema = new mongoose.Schema({
   },
   city: {
     type: String,
+    trim: true,
   },
   pesel: {
     type: String,
+    trim: true,
     length: 11,
   },
   agency: {
     type: String,
+    trim: true,
   },
 });
 

@@ -79,15 +79,13 @@ module.exports = {
         res.status(500).send(err);
       } else if (!group) {
         res.status(404).send({ message: "Group not found!" });
-      } else if (!group.participants.find(({ _id }) => _id.equals(req.id))) {
-        res
-          .status(400)
-          .send({
-            message: "There is no participant in this group with the given id",
-          });
+      } else if (!group.participants.includes(req.id)) {
+        res.status(400).send({
+          message: "You are not a participant in this group",
+        });
       } else {
         const updatedParticipants = group.participants.filter(
-          (participant) => participant.toString() !== req.id
+          (participant) => !participant.equals(req.id)
         );
         group.participants = updatedParticipants;
         group.save((err, updatedGroup) => {
@@ -110,7 +108,10 @@ module.exports = {
           res.status(500).send(err);
         } else if (!group) {
           res.status(404).send({ message: "Group not found!" });
-        } else if (!group.participants.find(({ _id }) => _id.equals(req.id)) && !group.manager._id.equals(req.id)) {
+        } else if (
+          !group.participants.find(({ _id }) => _id.equals(req.id)) &&
+          !group.manager._id.equals(req.id)
+        ) {
           res
             .status(400)
             .send({ message: "You are not allowed to view this group!" });
