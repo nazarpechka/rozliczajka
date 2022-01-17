@@ -45,7 +45,7 @@ const Navbar = () => {
   const atHome = location.pathname === "/";
   const className = atHome
     ? "-mb-60 z-10 text-white"
-    : "shadow-md shadow-orange-500/25";
+    : "shadow-md shadow-primary/25";
 
   return (
     <header className={cx(className, "w-full py-6")}>

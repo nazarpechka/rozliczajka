@@ -79,7 +79,7 @@ module.exports = {
         res.status(500).send(err);
       } else if (!group) {
         res.status(404).send({ message: "Group not found!" });
-      } else if (!group.participants.includes(req.body.userId)) {
+      } else if (!group.participants.find(({ _id }) => _id.equals(req.id))) {
         res
           .status(400)
           .send({
@@ -87,7 +87,7 @@ module.exports = {
           });
       } else {
         const updatedParticipants = group.participants.filter(
-          (participant) => participant.toString() !== req.body.userId
+          (participant) => participant.toString() !== req.id
         );
         group.participants = updatedParticipants;
         group.save((err, updatedGroup) => {
