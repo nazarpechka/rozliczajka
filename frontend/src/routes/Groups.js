@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useState, useEffect, useContext } from "react";
 
-import GroupCard from "../components/GroupCard";
-import GroupCardMini from "../components/GroupCardMini";
+import GroupCard from "../components/Groups/GroupCard";
+import GroupCardMini from "../components/Groups/GroupCardMini";
 import Button from "../components/Button";
 import UserContext from "../contexts/UserContext";
 

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import icon from "../assets/arrow-right.png";
+import icon from "../../assets/arrow-right.png";
 
 const GroupCard = ({ group }) => {
   return (
