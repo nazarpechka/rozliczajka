@@ -5,15 +5,27 @@ module.exports = {
   createGroup: (req, res) => {
     const group = new GroupModel(req.body);
 
+    if (req.isParticipant) {
+      return res.status(400).send({
+        message: "You should be a manager to create groups!",
+      });
+    }
+
     UserModel.findById(req.body.manager, (err, user) => {
-      if (user.isParticipant) {
-        res.status(400).send("User is not manager");
+      if (err) {
+        res.send(err);
+      } else if (!user) {
+        res.status(404).send({
+          message: "Manager user not found!",
+        });
+      } else if (user.isParticipant) {
+        res.status(400).send("Provided user is not a manager!");
       } else {
         group.save((err, createdGroup) => {
           if (err) {
-            res.send(err);
+            res.status(500).send(err);
           } else {
-            res.status(200).send(createdGroup);
+            res.send(createdGroup);
           }
         });
       }
@@ -21,20 +33,38 @@ module.exports = {
   },
 
   addUser: (req, res) => {
+    if (req.isParticipant) {
+      return res.status(400).send({
+        message: "You should be a manager to add participants to the group!",
+      });
+    }
+
     GroupModel.findById(req.params.id, (err, group) => {
       if (err) {
-        res.status(404).send(err);
+        res.status(400).send(err);
+      } else if (!group) {
+        res.status(404).send({ message: "Group not found!" });
+      } else if (group.manager !== req.id) {
+        res
+          .status(400)
+          .send({ message: "You are not the manager of this group!" });
       } else {
         UserModel.findById(req.body.userId, (err, user) => {
-          if (!user || !user.isParticipant) {
-            res.status(400).send("User is not participant");
+          if (err) {
+            res.status(500).send(err);
+          } else if (!user) {
+            res.status(404).send({ message: "User not found!" });
+          } else if (!user.isParticipant) {
+            res.status(400).send({
+              message: "You can't add a manager to the group participants!",
+            });
           } else {
             group.participants.push(req.body.userId);
             group.save((err, updatedGroup) => {
               if (err) {
-                res.send(err);
+                res.status(500).send(err);
               } else {
-                res.status(200).send(updatedGroup);
+                res.send(updatedGroup);
               }
             });
           }
@@ -46,11 +76,13 @@ module.exports = {
   leaveGroup: (req, res) => {
     GroupModel.findById(req.params.id, (err, group) => {
       if (err) {
-        res.status(404).send(err);
+        res.status(500).send(err);
+      } else if (!group) {
+        res.status(404).send({ message: "Group not found!" });
       } else if (!group.participants.includes(req.body.userId)) {
         res
           .status(400)
-          .send("There is not participant in this group with such id");
+          .send("There is no participant in this group with the given id");
       } else {
         const updatedParticipants = group.participants.filter(
           (participant) => participant.toString() !== req.body.userId
@@ -58,9 +90,9 @@ module.exports = {
         group.participants = updatedParticipants;
         group.save((err, updatedGroup) => {
           if (err) {
-            res.send(err);
+            res.status(500).send(err);
           } else {
-            res.status(200).send(updatedGroup);
+            res.send(updatedGroup);
           }
         });
       }
@@ -70,12 +102,21 @@ module.exports = {
   getGroup: (req, res) => {
     GroupModel.findById(req.params.id)
       .populate("manager", "name surname email city")
-      .populate("participants", "name surname  email city")
+      .populate("participants", "name surname email city")
       .exec((err, group) => {
         if (err) {
-          res.send(err);
+          res.status(500).send(err);
+        } else if (!group) {
+          res.status(404).send({ message: "Group not found!" });
+        } else if (
+          !group.participants.includes(req.id) ||
+          !group.manager === req.id
+        ) {
+          res
+            .status(400)
+            .send({ message: "You are not allowed to view this group!" });
         } else {
-          res.status(200).send(group);
+          res.send(group);
         }
       });
   },

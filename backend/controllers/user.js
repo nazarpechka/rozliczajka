@@ -15,9 +15,13 @@ module.exports = {
 
     user.save((err, createdUser) => {
       if (err) {
-        res.status(400).send(err);
+        if (err.code === 11000) {
+          res.status(500).send({ message: "User already exists!" });
+        } else {
+          res.status(500).send(err);
+        }
       } else {
-        res.status(200).send(createdUser);
+        res.send(createdUser);
       }
     });
   },
@@ -27,9 +31,9 @@ module.exports = {
       .populate("manager", "name surname")
       .exec((err, groups) => {
         if (err) {
-          res.send(err);
+          res.status(500).send(err);
         } else {
-          res.status(200).send(groups);
+          res.send(groups);
         }
       });
   },
@@ -37,7 +41,7 @@ module.exports = {
   login: (req, res) => {
     UserModel.findOne({ login: req.body.login }, (err, user) => {
       if (err) {
-        res.send(err);
+        res.status(500).send(err);
       } else if (!user) {
         res.status(404).send({
           message: "User not found!",
@@ -50,12 +54,15 @@ module.exports = {
           });
         }
 
-        const token = jwt.sign({ id: user.id }, config.secret, {
-          expiresIn: 86400,
-        });
+        const token = jwt.sign(
+          { id: user.id, isParticipant: user.isParticipant },
+          config.secret,
+          {
+            expiresIn: 86400,
+          }
+        );
 
-        res.status(200).send({
-          message: "Logged in",
+        res.send({
           user: {
             ...user.toObject(),
             token,

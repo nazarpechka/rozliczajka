@@ -68,7 +68,7 @@ const Signup = () => {
   return (
     <section className="container mx-auto flex flex-col items-center my-8">
       <h1 className="text-4xl font-medium">Rejestracja</h1>
-      <form className="w-1/2" onSubmit={onSubmit}>
+      <form className="w-1/3" onSubmit={onSubmit}>
         <Input
           label="Login"
           name="login"
