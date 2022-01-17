@@ -20,6 +20,8 @@ module.exports = {
           message: "Group with provided ID doesn't exist",
         });
       } else if (!group.participants.includes(req.id)) {
+        console.log(req.id);
+        console.log(group.participants);
         res.status(400).send({
           message: "You are not a participant in this group!",
         });

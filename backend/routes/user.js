@@ -1,8 +1,15 @@
-const { signup, getGroups, login } = require("../controllers/user");
+const {
+  getGroups,
+  getExpenses,
+  signup,
+  login,
+} = require("../controllers/user");
 const verifyToken = require("../middleware/verifyToken");
 
 module.exports = (router) => {
   router.route("/user/groups").get(verifyToken, getGroups);
+
+  router.route("/user/expenses").get(verifyToken, getExpenses);
 
   router.route("/user/signup").post(signup);
 

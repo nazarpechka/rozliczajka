@@ -1,11 +1,36 @@
 const config = require("../auth.config.js");
 const UserModel = require("../models/user");
 const GroupModel = require("../models/group");
+const ExpenseModel = require("../models/expense");
 
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 module.exports = {
+  getGroups: (req, res) => {
+    GroupModel.find({ participants: req.id })
+      .populate("manager", "name surname")
+      .exec((err, groups) => {
+        if (err) {
+          res.status(500).send(err);
+        } else {
+          res.send(groups);
+        }
+      });
+  },
+
+  getExpenses: (req, res) => {
+    ExpenseModel.find({ subexpenses: { $elemMatch: { user: req.id } } }).exec(
+      (err, expenses) => {
+        if (err) {
+          res.status(500).send(err);
+        } else {
+          res.send(expenses);
+        }
+      }
+    );
+  },
+
   signup: (req, res) => {
     const user = new UserModel({
       ...req.body,
@@ -24,18 +49,6 @@ module.exports = {
         res.send(createdUser);
       }
     });
-  },
-
-  getGroups: (req, res) => {
-    GroupModel.find({ participants: req.id })
-      .populate("manager", "name surname")
-      .exec((err, groups) => {
-        if (err) {
-          res.status(500).send(err);
-        } else {
-          res.send(groups);
-        }
-      });
   },
 
   login: (req, res) => {
