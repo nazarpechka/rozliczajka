@@ -13,6 +13,7 @@ import Debts from "./routes/Debts";
 import Confirmations from "./routes/Confirmations";
 import UserContext from "./contexts/UserContext";
 import RequireAuth from "./routes/RequireAuth";
+import DetailedInfo from "./routes/DetailedInfo";
 
 const App = () => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
@@ -82,6 +83,14 @@ const App = () => {
               element={
                 <RequireAuth>
                   <Confirmations />
+                </RequireAuth>
+              }
+            />
+            <Route 
+              path="/group/:id/detailed-info"
+              element={
+                <RequireAuth>
+                  <DetailedInfo />
                 </RequireAuth>
               }
             />
