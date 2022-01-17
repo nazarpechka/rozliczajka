@@ -3,7 +3,7 @@ import img from "../assets/people2.png";
 const Home = () => {
   return (
     <section className="bg-gradient-to-tr from-orange-500 to-primary relative">
-      <div className="container mx-auto flex items-center pt-72 pb-48 text-white">
+      <div className="container mx-auto flex items-center pt-64 pb-32 text-white">
         <div>
           <h2 className="text-8xl font-light">
             Twoja aplikacja do rozliczania
