@@ -110,7 +110,7 @@ module.exports = {
           res.status(500).send(err);
         } else if (!group) {
           res.status(404).send({ message: "Group not found!" });
-        } else if (!group.participants.find(({ _id }) => _id.equals(req.id))) {
+        } else if (!group.participants.find(({ _id }) => _id.equals(req.id)) && !group.manager._id.equals(req.id)) {
           res
             .status(400)
             .send({ message: "You are not allowed to view this group!" });
