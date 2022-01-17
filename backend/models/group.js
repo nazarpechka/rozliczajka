@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const groupSchema = new mongoose.Schema({
   name: {
@@ -20,14 +20,14 @@ const groupSchema = new mongoose.Schema({
     default: true,
   },
   participants: {
-    type: [mongoose.Types.ObjectId],
-    ref: 'User',
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "User",
   },
   manager: {
-    type: mongoose.Types.ObjectId,
-    ref: 'User',
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
     required: true,
   },
 });
 
-module.exports = mongoose.model('Group', groupSchema);
+module.exports = mongoose.model("Group", groupSchema);
