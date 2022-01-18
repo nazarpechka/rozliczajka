@@ -10,6 +10,7 @@ const Groups = () => {
   const { user } = useContext(UserContext);
   const [groups, setGroups] = useState([]);
   const [miniView, setMiniView] = useState(false);
+  const [errorMessage, setErrorMessage] = useState();
 
   useEffect(() => {
     axios
@@ -22,13 +23,27 @@ const Groups = () => {
         setGroups(data);
       })
       .catch((err) => {
-        console.log(err);
+        if (err.response) {
+          setErrorMessage(err.response.data.message);
+        } else {
+          setErrorMessage(err.message);
+        }
       });
   }, [user.token]);
 
   const changeView = () => {
     setMiniView(!miniView);
   };
+
+  if (!groups) {
+    return (
+      <section className="container mx-auto my-8">
+        <h1 className="text-4xl font-medium">
+          {errorMessage ? errorMessage : "Loading..."}
+        </h1>
+      </section>
+    );
+  }
 
   return (
     <section className="container mx-auto my-8">

@@ -88,11 +88,11 @@ module.exports = {
           (participant) => !participant.equals(req.id)
         );
         group.participants = updatedParticipants;
-        group.save((err, updatedGroup) => {
+        group.save((err) => {
           if (err) {
             res.status(500).send(err);
           } else {
-            res.send(updatedGroup);
+            res.send();
           }
         });
       }

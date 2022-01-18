@@ -61,7 +61,11 @@ const Signup = () => {
           "Pomyślnie zarejestrowano! Teraz możesz zalogować się.";
       })
       .catch((err) => {
-        error.textContent = err.response.data.message;
+        if (err.response) {
+          error.textContent = err.response.data.message;
+        } else {
+          error.textContent = err.message;
+        }
       });
   };
 

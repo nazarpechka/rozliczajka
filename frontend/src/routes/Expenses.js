@@ -6,7 +6,8 @@ import UserContext from "../contexts/UserContext";
 
 const Expenses = () => {
   const { user } = useContext(UserContext);
-  const [expenses, setExpenses] = useState([]);
+  const [expenses, setExpenses] = useState();
+  const [errorMessage, setErrorMessage] = useState();
 
   useEffect(() => {
     axios
@@ -19,11 +20,24 @@ const Expenses = () => {
         setExpenses(data);
       })
       .catch((err) => {
-        console.log(err);
+        if (err.response) {
+          setErrorMessage(err.response.data.message);
+        } else {
+          setErrorMessage(err.message);
+        }
       });
   }, [user.token]);
 
-  console.log(expenses);
+  if (!expenses) {
+    console.log(errorMessage);
+    return (
+      <section className="container mx-auto my-8">
+        <h1 className="text-4xl font-medium">
+          {errorMessage ? errorMessage : "Loading..."}
+        </h1>
+      </section>
+    );
+  }
 
   return (
     <section className="container mx-auto my-8">

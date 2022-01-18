@@ -1,17 +1,18 @@
 import axios from "axios";
-import React from "react";
+import { useContext, useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 import UserContext from "../contexts/UserContext";
 import Button from "../components/Button";
 
-const DetailedInfo = () => {
+const GroupDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { user } = React.useContext(UserContext);
-  const [group, setGroup] = React.useState(null);
+  const { user } = useContext(UserContext);
+  const [group, setGroup] = useState();
+  const [errorMessage, setErrorMessage] = useState();
 
-  React.useEffect(() => {
+  useEffect(() => {
     axios
       .get(`/api/group/${id}`, {
         headers: {
@@ -22,36 +23,47 @@ const DetailedInfo = () => {
         setGroup(data);
       })
       .catch((err) => {
-        console.log(err);
+        if (err.response) {
+          setErrorMessage(err.response.data.message);
+        } else {
+          setErrorMessage(err.message);
+        }
       });
   }, [user.token, id]);
 
   const leaveGroup = () => {
     axios
-      .delete(`http://localhost:4000/api/group/${id}/leave-group`, {
+      .delete(`/api/group/${id}/leave`, {
         headers: {
           "x-access-token": user.token,
         },
       })
-      .then(({ data }) => {
-        setGroup(data);
+      .then(() => {
         navigate("/groups");
       })
       .catch((err) => {
-        console.log(err);
+        if (err.response) {
+          setErrorMessage(err.response.data.message);
+        } else {
+          setErrorMessage(err.message);
+        }
       });
   };
 
   if (!group) {
-    return null;
+    return (
+      <section className="container mx-auto my-8">
+        <h1 className="text-4xl font-medium">
+          {errorMessage ? errorMessage : "Loading..."}
+        </h1>
+      </section>
+    );
   }
 
   return (
-    <div>
-      <h1 className="container mx-auto text-4xl font-medium mb-11 mt-10">
-        {group.name}
-      </h1>
-      <div className="container mx-auto py-2">
+    <section className="container mx-auto my-8">
+      <h1 className="text-4xl font-medium mb-8">{group.name}</h1>
+      <div className="py-2">
         <div className="flex justify-between text-2xl mb-6">
           <span>
             <span className="font-medium">Data utworzenia:</span>{" "}
@@ -96,8 +108,8 @@ const DetailedInfo = () => {
       <div className="container mx-auto mt-8 flex">
         <Button label="Opuść grupę" onClick={leaveGroup} />
       </div>
-    </div>
+    </section>
   );
 };
 
-export default DetailedInfo;
+export default GroupDetails;

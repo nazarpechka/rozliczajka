@@ -13,5 +13,5 @@ module.exports = (router) => {
 
   router.route("/group/:id/add-user").post(verifyToken, addUser);
 
-  router.route("/group/:id/leave-group").delete(verifyToken, leaveGroup);
+  router.route("/group/:id/leave").delete(verifyToken, leaveGroup);
 };

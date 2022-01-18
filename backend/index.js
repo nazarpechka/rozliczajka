@@ -20,12 +20,15 @@ app.use(logger("dev"));
 app.use(bodyParser.json());
 app.use(cors());
 
-app.use(express.static(path.join(__dirname, "../frontend/build/")));
-
 app.use("/api", setRoutes(router));
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/build/", "index.html"));
-});
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../frontend/build/")));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../frontend/build/", "index.html"));
+  });
+}
 
 app.listen(PORT, () => {
   console.log(`Rozliczajka is running on ${PORT} port`);

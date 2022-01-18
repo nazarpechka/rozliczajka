@@ -24,7 +24,7 @@ const GroupCard = ({ group }) => {
           </span>
         </div>
         <Link
-          to={`/group/${group._id}/detailed-info`}
+          to={`/group/${group._id}/details`}
           className="flex items-center gap-6 hover:opacity-60 ease-in-out duration-200"
         >
           <span className="text-xl">przejdź do grupy</span>
