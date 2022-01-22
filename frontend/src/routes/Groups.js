@@ -9,7 +9,7 @@ import UserContext from "../contexts/UserContext";
 const Groups = () => {
   const { user } = useContext(UserContext);
   const [groups, setGroups] = useState([]);
-  const [miniView, setMiniView] = useState(false);
+  const [miniView, setMiniView] = useState(true);
   const [errorMessage, setErrorMessage] = useState();
 
   useEffect(() => {

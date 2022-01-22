@@ -5,20 +5,21 @@ import { useParams, useNavigate } from "react-router-dom";
 import UserContext from "../contexts/UserContext";
 import Button from "../components/Button";
 import Select from "../components/Select";
+import Alert from "../components/Alert";
 
 const GroupDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
   const [group, setGroup] = useState();
-  const [errorMessage, setErrorMessage] = useState();
+  const [errors, setErrors] = useState([]);
 
   // For managers only
   const [users, setUsers] = useState([]);
   const [userId, setUserId] = useState();
 
   const fetchUsers = () => {
-    if (user.isParticipant) {
+    if (user.isParticipant || !group) {
       return;
     }
     axios
@@ -35,14 +36,16 @@ const GroupDetails = () => {
           (user) => user.isParticipant && !participants.includes(user._id)
         );
 
-        setUsers(filteredUsers);
-        setUserId(filteredUsers[0]);
+        if (filteredUsers.length) {
+          setUsers(filteredUsers);
+          setUserId(filteredUsers[0]._id);
+        }
       })
       .catch((err) => {
         if (err.response) {
-          setErrorMessage(err.response.data.message);
+          setErrors([...errors, err.response.data.message]);
         } else {
-          setErrorMessage(err.message);
+          setErrors([...errors, err.message]);
         }
       });
   };
@@ -59,9 +62,9 @@ const GroupDetails = () => {
       })
       .catch((err) => {
         if (err.response) {
-          setErrorMessage(err.response.data.message);
+          setErrors([...errors, err.response.data.message]);
         } else {
-          setErrorMessage(err.message);
+          setErrors([...errors, err.message]);
         }
       });
   };
@@ -81,15 +84,16 @@ const GroupDetails = () => {
       })
       .catch((err) => {
         if (err.response) {
-          setErrorMessage(err.response.data.message);
+          setErrors([...errors, err.response.data.message]);
         } else {
-          setErrorMessage(err.message);
+          setErrors([...errors, err.message]);
         }
       });
   };
 
   const addUser = (e) => {
     e.preventDefault();
+    console.log("adding", userId);
     axios
       .post(
         `/api/group/${id}/addUser`,
@@ -105,9 +109,9 @@ const GroupDetails = () => {
       })
       .catch((err) => {
         if (err.response) {
-          console.log(err.response.data.message);
+          setErrors([...errors, err.response.data.message]);
         } else {
-          console.log(err.message);
+          setErrors([...errors, err.message]);
         }
       });
   };
@@ -125,9 +129,9 @@ const GroupDetails = () => {
       })
       .catch((err) => {
         if (err.response) {
-          console.log(err.response.data.message);
+          setErrors([...errors, err.response.data.message]);
         } else {
-          console.log(err.message);
+          setErrors([...errors, err.message]);
         }
       });
   };
@@ -135,15 +139,20 @@ const GroupDetails = () => {
   if (!group) {
     return (
       <section className="container mx-auto my-8">
-        <h1 className="text-4xl font-medium">
-          {errorMessage ? errorMessage : "Loading..."}
-        </h1>
+        {errors.map((error) => (
+          <Alert text={error} />
+        ))}
+        <h1 className="text-4xl font-medium">Loading...</h1>
       </section>
     );
   }
 
   return (
     <section className="container mx-auto my-8">
+      {errors.map((error) => (
+        <Alert text={error} />
+      ))}
+
       <h1 className="text-4xl font-medium mb-8">{group.name}</h1>
       <div className="py-2">
         <div className="flex justify-between text-2xl mb-6">

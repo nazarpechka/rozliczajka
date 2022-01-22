@@ -48,6 +48,10 @@ module.exports = {
         res
           .status(400)
           .send({ message: "You are not the manager of this group!" });
+      } else if (group.participants.includes(req.body.userId)) {
+        res.status(400).send({
+          message: "Provided user is already a participant in this group!",
+        });
       } else {
         UserModel.findById(req.body.userId, (err, user) => {
           if (err) {
