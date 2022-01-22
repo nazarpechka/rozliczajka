@@ -133,12 +133,11 @@ const GroupDetails = () => {
           ))}
         </ul>
       </div>
-      {user.isParticipant && (
+      {user.isParticipant ? (
         <div className="container mx-auto mt-8 flex">
-          <Button label="Opuść grupę" onClick={leaveGroup} />
+          <Button label="Opuść grupę" onClick={() => leaveGroup()} />
         </div>
-      )}
-      {!user.isParticipant && (
+      ) : (
         <div className="container mx-auto mt-8 flex">
           <form
             onSubmit={(e) => {
