@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import useRequest from "../hooks/useRequest";
 
+import Section from "../components/Section";
 import GroupCard from "../components/Groups/GroupCard";
 import GroupCardMini from "../components/Groups/GroupCardMini";
 import Button from "../components/Button";
@@ -22,22 +23,15 @@ const Groups = () => {
     setMiniView(!miniView);
   };
 
-  if (!groups) {
-    return (
-      <section className="container mx-auto my-8">
-        <h1 className="text-4xl font-medium">Loading...</h1>
-      </section>
-    );
-  }
-
-  return (
-    <section className="container mx-auto my-8">
+  return groups ? (
+    <Section
+      title={
+        user.isParticipant
+          ? "Grupy, do których jesteś dodany"
+          : "Grupy, kierowane przez ciebie"
+      }
+    >
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-4xl font-medium">
-          {user.isParticipant
-            ? "Grupy, do których jesteś dodany"
-            : "Grupy, kierowane przez ciebie"}
-        </h1>
         <Button label="Zmienić wygląd" onClick={changeView} />
       </div>
 
@@ -54,7 +48,9 @@ const Groups = () => {
           ))}
         </div>
       )}
-    </section>
+    </Section>
+  ) : (
+    <Section title="Loading..." />
   );
 };
 

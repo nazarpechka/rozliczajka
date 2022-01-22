@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import useRequest from "../hooks/useRequest";
 
+import Section from "../components/Section";
 import Input from "../components/Input";
 import Button from "../components/Button";
 
@@ -27,17 +28,11 @@ const Signup = () => {
 
   const validate = (target) => {
     if (target.name === "password") {
-      if (target.value.length < 6) {
-        target.setCustomValidity("invalid");
-      } else {
-        target.setCustomValidity("");
-      }
+      target.setCustomValidity(target.value.length < 6 ? "invalid" : "");
     } else if (target.name === "passwordRepeat") {
-      if (target.value !== formData.password) {
-        target.setCustomValidity("invalid");
-      } else {
-        target.setCustomValidity("");
-      }
+      target.setCustomValidity(
+        target.value !== formData.password ? "invalid" : ""
+      );
     }
   };
 
@@ -58,15 +53,12 @@ const Signup = () => {
       onError("Hasła nie są takie same!");
       return;
     }
-
     const { passwordRepeat: dummy, ...data } = formData;
-
     signup(data);
   };
 
   return (
-    <section className="container mx-auto flex flex-col items-center my-8">
-      <h1 className="text-4xl font-medium">Rejestracja</h1>
+    <Section title="Rejestracja" className="flex flex-col items-center my-8">
       <form className="w-1/3" onSubmit={onSubmit}>
         <Input
           label="Login"
@@ -128,7 +120,7 @@ const Signup = () => {
         />
         <Button className="my-4" label="Zarejestruj" />
       </form>
-    </section>
+    </Section>
   );
 };
 

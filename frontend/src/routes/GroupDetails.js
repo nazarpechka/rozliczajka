@@ -4,6 +4,7 @@ import useRequest from "../hooks/useRequest";
 
 import UserContext from "../contexts/UserContext";
 import AlertContext from "../contexts/AlertContext";
+import Section from "../components/Section";
 import Button from "../components/Button";
 import Select from "../components/Select";
 
@@ -73,17 +74,8 @@ const GroupDetails = () => {
     fetchUsers();
   }, [group]);
 
-  if (!group) {
-    return (
-      <section className="container mx-auto my-8">
-        <h1 className="text-4xl font-medium">Loading...</h1>
-      </section>
-    );
-  }
-
-  return (
-    <section className="container mx-auto my-8">
-      <h1 className="text-4xl font-medium mb-8">{group.name}</h1>
+  return group ? (
+    <Section title={group.name}>
       <div className="py-2">
         <div className="flex justify-between text-2xl mb-6">
           <span>
@@ -165,7 +157,9 @@ const GroupDetails = () => {
           </form>
         </div>
       )}
-    </section>
+    </Section>
+  ) : (
+    <Section title="Loading..." />
   );
 };
 

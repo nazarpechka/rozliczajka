@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect } from "react";
 import useRequest from "../hooks/useRequest";
 
+import Section from "../components/Section";
 import ExpenseRow from "../components/Expenses/ExpenseRow";
 import AlertContext from "../contexts/AlertContext";
 
@@ -18,17 +19,8 @@ const Expenses = () => {
     fetchExpenses();
   }, []);
 
-  if (!expenses) {
-    return (
-      <section className="container mx-auto my-8">
-        <h1 className="text-4xl font-medium">Loading...</h1>
-      </section>
-    );
-  }
-
-  return (
-    <section className="container mx-auto my-8">
-      <h1 className="text-4xl font-medium mb-8">Lista wydatków</h1>
+  return expenses ? (
+    <Section title="Lista wydatków">
       <div className="border border-[#AAAAAA]/50 rounded-lg">
         <div className="grid grid-cols-5 gap-4 px-5 py-7 border border-primary bg-[#E5E5E5]/25 text-lg rounded-lg">
           <span>ID</span>
@@ -41,7 +33,9 @@ const Expenses = () => {
           <ExpenseRow key={expense._id} expense={expense} />
         ))}
       </div>
-    </section>
+    </Section>
+  ) : (
+    <Section title="Loading..." />
   );
 };
 export default Expenses;

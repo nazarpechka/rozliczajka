@@ -7,10 +7,6 @@ const Alert = ({ className, label, text }) => {
     setTimeout(() => setHidden(true), 10000);
   }, []);
 
-  if (hidden) {
-    return null;
-  }
-
   return hidden ? null : (
     <div
       className={
