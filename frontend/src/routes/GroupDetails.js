@@ -170,13 +170,17 @@ const GroupDetails = () => {
                 addUser({ userId });
               }}
             >
-              <Select
-                label="Uczestnik"
-                name="user"
-                options={users}
-                value={userId}
-                onChange={(e) => setUserId(e.target.value)}
-              />
+              <div className="inline-block">
+                <Select
+                  label="Uczestnik"
+                  name="user"
+                  options={users.map(({ _id, name, surname }) => {
+                    return { key: _id, val: name + " " + surname };
+                  })}
+                  value={userId}
+                  onChange={(e) => setUserId(e.target.value)}
+                />
+              </div>
               <Button label="Dodaj uczestnika" />
             </form>
           </div>

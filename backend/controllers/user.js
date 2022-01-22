@@ -10,6 +10,7 @@ module.exports = {
   getGroups: (req, res) => {
     GroupModel.find({ $or: [{ participants: req.id }, { manager: req.id }] })
       .populate("manager", "name surname")
+      .populate("participants", "_id name surname")
       .exec((err, groups) => {
         if (err) {
           res.status(500).send(err);

@@ -4,9 +4,9 @@ import icon from "../../assets/arrow-right.png";
 
 const GroupCard = ({ group }) => {
   return (
-    <div className="container mx-auto rounded-md shadow-md p-5 mb-11 relative">
+    <div className="container mx-auto rounded-md shadow-md p-5 mb-11 relative overflow-hidden">
       {!group.isActive && (
-        <div className="w-full h-full absolute top-0 right-0 z-10 bg-gray-900 bg-opacity-50 flex justify-center items-center">
+        <div className="w-full h-full absolute top-0 right-0 z-10 bg-gray-900 bg-opacity-25 flex justify-center items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-12 w-12 text-red-500"
