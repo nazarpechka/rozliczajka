@@ -1,9 +1,11 @@
-import axios from "axios";
 import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
+import useRequest from "../hooks/useRequest";
+
 import Input from "../components/Input";
 import Button from "../components/Button";
 import UserContext from "../contexts/UserContext";
+import AlertContext from "../contexts/AlertContext";
 
 const Login = () => {
   const { onLogin } = useContext(UserContext);
@@ -11,6 +13,9 @@ const Login = () => {
     login: "",
     password: "",
   });
+
+  const { onError } = useContext(AlertContext);
+  const login = useRequest("/api/user/login", "POST", onLogin, onError);
 
   const onChange = (e) => {
     const target = e.target;
@@ -21,34 +26,17 @@ const Login = () => {
     });
   };
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    const error = document.querySelector("#error");
-    error.textContent = "";
-
-    axios
-      .post("/api/user/login", formData)
-      .then(({ data }) => {
-        if (!data.user) {
-          error.textContent = data.message;
-        } else {
-          onLogin(data.user);
-        }
-      })
-      .catch((err) => {
-        if (err.response) {
-          error.textContent = err.response.data.message;
-        } else {
-          error.textContent = err.message;
-        }
-      });
-  };
-
   return (
     <div>
       <section className="container mx-auto flex flex-col items-center my-8">
         <h1 className="text-4xl font-medium">Logowanie</h1>
-        <form className="w-1/3" onSubmit={onSubmit}>
+        <form
+          className="w-1/3"
+          onSubmit={(e) => {
+            e.preventDefault();
+            login(formData);
+          }}
+        >
           <Input
             label="Login"
             name="login"
@@ -65,8 +53,7 @@ const Login = () => {
             value={formData.password}
             onChange={onChange}
           />
-          <span className="block text-lg text-red-500 my-8" id="error"></span>
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center my-4">
             <Button label="Zaloguj" />
             <span className="block">
               Nie posiadasz konta?

@@ -1,15 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Alert = ({ className, label, text }) => {
   const [hidden, setHidden] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => setHidden(true), 10000);
+  }, []);
 
   if (hidden) {
     return null;
   }
 
-  return (
+  return hidden ? null : (
     <div
-      className={"my-4 border px-4 py-3 rounded relative " + className}
+      className={
+        "container w-1/3 mx-auto my-4 border px-4 py-3 rounded relative " +
+        className
+      }
       role="alert"
     >
       <strong className="font-bold">{label}</strong>

@@ -1,7 +1,10 @@
-import axios from "axios";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import useRequest from "../hooks/useRequest";
+
 import Input from "../components/Input";
 import Button from "../components/Button";
+
+import AlertContext from "../contexts/AlertContext";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +16,14 @@ const Signup = () => {
     surname: "",
     birthDate: new Date().toISOString().substr(0, 10),
   });
+
+  const { onError, onSuccess } = useContext(AlertContext);
+  const signup = useRequest(
+    "/api/user/signup",
+    "POST",
+    () => onSuccess("Pomyślnie zarejestrowano! Teraz możesz zalogować się."),
+    onError
+  );
 
   const validate = (target) => {
     if (target.name === "password") {
@@ -42,31 +53,15 @@ const Signup = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const error = document.querySelector("#error");
-    const success = document.querySelector("#success");
-    error.textContent = "";
-    success.textContent = "";
 
     if (formData.password !== formData.passwordRepeat) {
-      error.textContent = "Hasła nie są takie same!";
+      onError("Hasła nie są takie same!");
       return;
     }
 
     const { passwordRepeat: dummy, ...data } = formData;
 
-    axios
-      .post("/api/user/signup", data)
-      .then(({ data }) => {
-        success.textContent =
-          "Pomyślnie zarejestrowano! Teraz możesz zalogować się.";
-      })
-      .catch((err) => {
-        if (err.response) {
-          error.textContent = err.response.data.message;
-        } else {
-          error.textContent = err.message;
-        }
-      });
+    signup(data);
   };
 
   return (
@@ -131,9 +126,7 @@ const Signup = () => {
           value={formData.birthDate}
           onChange={onChange}
         />
-        <span className="block text-lg text-red-500 mt-8" id="error"></span>
-        <span className="block text-lg text-green-500 mt-8" id="success"></span>
-        <Button label="Zarejestruj" />
+        <Button className="my-4" label="Zarejestruj" />
       </form>
     </section>
   );

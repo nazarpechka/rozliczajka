@@ -1,150 +1,81 @@
-import axios from "axios";
 import { useContext, useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import useRequest from "../hooks/useRequest";
 
 import UserContext from "../contexts/UserContext";
+import AlertContext from "../contexts/AlertContext";
 import Button from "../components/Button";
 import Select from "../components/Select";
-import ErrorAlert from "../components/ErrorAlert";
-import SuccessAlert from "../components/SuccessAlert";
 
 const GroupDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
+  const { onError, onSuccess } = useContext(AlertContext);
   const [group, setGroup] = useState();
-  const [errors, setErrors] = useState([]);
-  const [successes, setSuccesses] = useState([]);
 
   // For managers only
   const [users, setUsers] = useState([]);
   const [userId, setUserId] = useState();
 
-  const fetchUsers = () => {
+  // Requests
+  const fetchDetails = useRequest(`/api/group/${id}`, "GET", setGroup, onError);
+  const fetchUsers = useRequest(
+    "/api/user/list",
+    "GET",
+    (users) => {
+      const participants = group.participants.map(
+        (participant) => participant._id
+      );
+      const filteredUsers = users.filter(
+        (user) => user.isParticipant && !participants.includes(user._id)
+      );
+
+      if (filteredUsers.length) {
+        setUsers(filteredUsers);
+        setUserId(filteredUsers[0]._id);
+      } else {
+        setUserId("");
+      }
+    },
+    onError
+  );
+  const leaveGroup = useRequest(
+    `/api/group/${id}/leave`,
+    "DELETE",
+    () => navigate("/groups"),
+    onError
+  );
+  const addUser = useRequest(
+    `/api/group/${id}/addUser`,
+    "POST",
+    () => {
+      fetchDetails();
+      onSuccess(`Dodałes uczestnika ${userId}`);
+    },
+    onError
+  );
+  const removeUser = useRequest(
+    `/api/group/${id}/removeUser`,
+    "DELETE",
+    () => {
+      fetchDetails();
+      onSuccess(`Usuniełeś uczestnika ${userId}`);
+    },
+    onError
+  );
+
+  useEffect(fetchDetails, []);
+  useEffect(() => {
     if (user.isParticipant || !group) {
       return;
     }
-    axios
-      .get("/api/user/list", {
-        headers: {
-          "x-access-token": user.token,
-        },
-      })
-      .then(({ data }) => {
-        const participants = group.participants.map(
-          (participant) => participant._id
-        );
-        const filteredUsers = data.filter(
-          (user) => user.isParticipant && !participants.includes(user._id)
-        );
-
-        if (filteredUsers.length) {
-          setUsers(filteredUsers);
-          setUserId(filteredUsers[0]._id);
-        }
-      })
-      .catch((err) => {
-        if (err.response) {
-          setErrors([...errors, err.response.data.message]);
-        } else {
-          setErrors([...errors, err.message]);
-        }
-      });
-  };
-
-  const fetchDetails = () => {
-    axios
-      .get(`/api/group/${id}`, {
-        headers: {
-          "x-access-token": user.token,
-        },
-      })
-      .then(({ data }) => {
-        setGroup(data);
-      })
-      .catch((err) => {
-        if (err.response) {
-          setErrors([...errors, err.response.data.message]);
-        } else {
-          setErrors([...errors, err.message]);
-        }
-      });
-  };
-
-  useEffect(fetchDetails, []);
-  useEffect(fetchUsers, [group]);
-
-  const leaveGroup = () => {
-    axios
-      .delete(`/api/group/${id}/leave`, {
-        headers: {
-          "x-access-token": user.token,
-        },
-      })
-      .then(() => {
-        navigate("/groups");
-      })
-      .catch((err) => {
-        if (err.response) {
-          setErrors([...errors, err.response.data.message]);
-        } else {
-          setErrors([...errors, err.message]);
-        }
-      });
-  };
-
-  const addUser = (e) => {
-    e.preventDefault();
-    axios
-      .post(
-        `/api/group/${id}/addUser`,
-        { userId },
-        {
-          headers: {
-            "x-access-token": user.token,
-          },
-        }
-      )
-      .then(() => {
-        fetchDetails();
-        setSuccesses([...successes, `Dodałes uczestnika ${userId}`]);
-      })
-      .catch((err) => {
-        if (err.response) {
-          setErrors([...errors, err.response.data.message]);
-        } else {
-          setErrors([...errors, err.message]);
-        }
-      });
-  };
-
-  const removeUser = (userId) => {
-    axios
-      .delete(`/api/group/${id}/removeUser`, {
-        data: { userId },
-        headers: {
-          "x-access-token": user.token,
-        },
-      })
-      .then(() => {
-        fetchDetails();
-        setSuccesses([...successes, `Usuniełeś uczestnika ${userId}`]);
-      })
-      .catch((err) => {
-        if (err.response) {
-          setErrors([...errors, err.response.data.message]);
-        } else {
-          setErrors([...errors, err.message]);
-        }
-      });
-  };
+    fetchUsers();
+  }, [group]);
 
   if (!group) {
     return (
       <section className="container mx-auto my-8">
-        {errors.map((error) => (
-          <ErrorAlert text={error} />
-        ))}
         <h1 className="text-4xl font-medium">Loading...</h1>
       </section>
     );
@@ -152,14 +83,6 @@ const GroupDetails = () => {
 
   return (
     <section className="container mx-auto my-8">
-      {errors.map((error) => (
-        <ErrorAlert text={error} />
-      ))}
-
-      {successes.map((success) => (
-        <SuccessAlert text={success} />
-      ))}
-
       <h1 className="text-4xl font-medium mb-8">{group.name}</h1>
       <div className="py-2">
         <div className="flex justify-between text-2xl mb-6">
@@ -205,7 +128,7 @@ const GroupDetails = () => {
                 viewBox="0 0 20 20"
                 fill="currentColor"
                 onClick={() => {
-                  removeUser(participant._id);
+                  removeUser({ userId: participant._id });
                 }}
               >
                 <path
@@ -225,7 +148,12 @@ const GroupDetails = () => {
       )}
       {!user.isParticipant && (
         <div className="container mx-auto mt-8 flex">
-          <form onSubmit={addUser}>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              addUser({ userId });
+            }}
+          >
             <Select
               label="Uczestnik"
               name="user"

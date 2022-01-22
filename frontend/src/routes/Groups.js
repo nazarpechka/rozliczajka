@@ -1,35 +1,22 @@
-import axios from "axios";
 import { useState, useEffect, useContext } from "react";
+import useRequest from "../hooks/useRequest";
 
 import GroupCard from "../components/Groups/GroupCard";
 import GroupCardMini from "../components/Groups/GroupCardMini";
 import Button from "../components/Button";
 import UserContext from "../contexts/UserContext";
+import AlertContext from "../contexts/AlertContext";
 
 const Groups = () => {
   const { user } = useContext(UserContext);
   const [groups, setGroups] = useState([]);
   const [miniView, setMiniView] = useState(true);
-  const [errorMessage, setErrorMessage] = useState();
+  const { onError } = useContext(AlertContext);
+  const fetchGroups = useRequest(`/api/user/groups`, "GET", setGroups, onError);
 
   useEffect(() => {
-    axios
-      .get(`/api/user/groups`, {
-        headers: {
-          "x-access-token": user.token,
-        },
-      })
-      .then(({ data }) => {
-        setGroups(data);
-      })
-      .catch((err) => {
-        if (err.response) {
-          setErrorMessage(err.response.data.message);
-        } else {
-          setErrorMessage(err.message);
-        }
-      });
-  }, [user.token]);
+    fetchGroups();
+  }, []);
 
   const changeView = () => {
     setMiniView(!miniView);
@@ -38,9 +25,7 @@ const Groups = () => {
   if (!groups) {
     return (
       <section className="container mx-auto my-8">
-        <h1 className="text-4xl font-medium">
-          {errorMessage ? errorMessage : "Loading..."}
-        </h1>
+        <h1 className="text-4xl font-medium">Loading...</h1>
       </section>
     );
   }

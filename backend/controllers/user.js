@@ -95,10 +95,8 @@ module.exports = {
         );
 
         res.send({
-          user: {
-            ...user.toObject(),
-            token,
-          },
+          ...user.toObject(),
+          token,
         });
       }
     });

@@ -1,39 +1,27 @@
 import { useContext, useState, useEffect } from "react";
-import axios from "axios";
+import useRequest from "../hooks/useRequest";
 
 import ExpenseRow from "../components/Expenses/ExpenseRow";
-import UserContext from "../contexts/UserContext";
+import AlertContext from "../contexts/AlertContext";
 
 const Expenses = () => {
-  const { user } = useContext(UserContext);
   const [expenses, setExpenses] = useState();
-  const [errorMessage, setErrorMessage] = useState();
+  const { onError } = useContext(AlertContext);
+  const fetchExpenses = useRequest(
+    `/api/user/expenses`,
+    "GET",
+    setExpenses,
+    onError
+  );
 
   useEffect(() => {
-    axios
-      .get(`/api/user/expenses`, {
-        headers: {
-          "x-access-token": user.token,
-        },
-      })
-      .then(({ data }) => {
-        setExpenses(data);
-      })
-      .catch((err) => {
-        if (err.response) {
-          setErrorMessage(err.response.data.message);
-        } else {
-          setErrorMessage(err.message);
-        }
-      });
-  }, [user.token]);
+    fetchExpenses();
+  }, []);
 
   if (!expenses) {
     return (
       <section className="container mx-auto my-8">
-        <h1 className="text-4xl font-medium">
-          {errorMessage ? errorMessage : "Loading..."}
-        </h1>
+        <h1 className="text-4xl font-medium">Loading...</h1>
       </section>
     );
   }
