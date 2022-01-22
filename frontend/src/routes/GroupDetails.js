@@ -7,6 +7,7 @@ import AlertContext from "../contexts/AlertContext";
 import Section from "../components/Section";
 import Button from "../components/Button";
 import Select from "../components/Select";
+import ConfirmModal from "../components/ConfirmModal";
 
 const GroupDetails = () => {
   const { id } = useParams();
@@ -44,7 +45,10 @@ const GroupDetails = () => {
   const leaveGroup = useRequest(
     `/api/group/${id}/leave`,
     "DELETE",
-    () => navigate("/groups"),
+    () => {
+      navigate("/groups");
+      onSuccess(`Opuściłeś grupę ${group.name}`);
+    },
     onError
   );
   const addUser = useRequest(
@@ -98,47 +102,58 @@ const GroupDetails = () => {
           {group.manager.surname}
         </span>
       </div>
-      <div className="container mx-auto border-y border-primary/50 py-4 flex my-4">
+      <div className="border-y border-primary/50 py-4 flex my-4">
         <span className="text-2xl">
           <span className="font-medium">Opis wycieczki:</span>{" "}
           {group.description}
         </span>
       </div>
-      <span className="container mx-auto flex text-2xl font-medium">
-        Lista uczestników:
-      </span>
-      <div className="container mx-auto flex text-2xl mt-5 p-5 border border-primary/50 rounded-md max-h-72 overflow-auto">
+      <span className="flex text-2xl font-medium">Lista uczestników:</span>
+      <div className="flex text-2xl mt-5 p-5 border border-primary/50 rounded-md max-h-72 overflow-auto">
         <ul>
           {group.participants.map((participant, index) => (
             <li key={participant._id}>
               {index + 1}. {participant.name} {participant.surname} -{" "}
               {participant.email}{" "}
               {participant.city ? `, ${participant.city}` : ``}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 inline-block hover:text-red-500 hover:cursor-pointer"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                onClick={() => {
-                  removeUser({ userId: participant._id });
-                }}
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                  clipRule="evenodd"
-                />
-              </svg>
+              {!user.isParticipant && (
+                <ConfirmModal
+                  title="Usunąć uczestnika?"
+                  text={`Czy na pewno chcesz usunąć uczestnika ${
+                    participant.name + " " + participant.surname
+                  }?`}
+                  onConfirm={() => {
+                    removeUser({ userId: participant._id });
+                  }}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 inline-block hover:text-red-500 hover:cursor-pointer"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </ConfirmModal>
+              )}
             </li>
           ))}
         </ul>
       </div>
       {user.isParticipant ? (
-        <div className="container mx-auto mt-8 flex">
-          <Button label="Opuść grupę" onClick={() => leaveGroup()} />
-        </div>
+        <ConfirmModal
+          title="Opuścić grupę?"
+          text="Czy na pewno chcesz opuścić grupę?"
+          onConfirm={leaveGroup}
+        >
+          <Button className="mt-4" label="Opuść grupę" />
+        </ConfirmModal>
       ) : (
-        <div className="container mx-auto mt-8 flex">
+        <div className="mt-8 flex">
           <form
             onSubmit={(e) => {
               e.preventDefault();
