@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const Alert = ({ text }) => {
+const Alert = ({ className, label, text }) => {
   const [hidden, setHidden] = useState(false);
 
   if (hidden) {
@@ -9,14 +9,14 @@ const Alert = ({ text }) => {
 
   return (
     <div
-      className="my-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+      className={"my-4 border px-4 py-3 rounded relative " + className}
       role="alert"
     >
-      <strong className="font-bold">Błąd! </strong>
+      <strong className="font-bold">{label}</strong>
       <span className="block sm:inline">{text}</span>
       <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
         <svg
-          className="fill-current h-6 w-6 text-red-500"
+          className="fill-current h-6 w-6"
           role="button"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"

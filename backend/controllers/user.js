@@ -20,15 +20,18 @@ module.exports = {
   },
 
   getExpenses: (req, res) => {
-    ExpenseModel.find({ subexpenses: { $elemMatch: { user: req.id } } }).exec(
-      (err, expenses) => {
-        if (err) {
-          res.status(500).send(err);
-        } else {
-          res.send(expenses);
-        }
+    ExpenseModel.find({
+      $or: [
+        { subexpenses: { $elemMatch: { user: req.id } } },
+        { "group.manager": req.id },
+      ],
+    }).exec((err, expenses) => {
+      if (err) {
+        res.status(500).send(err);
+      } else {
+        res.send(expenses);
       }
-    );
+    });
   },
 
   getUsers: (req, res) => {

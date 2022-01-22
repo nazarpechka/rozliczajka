@@ -5,7 +5,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import UserContext from "../contexts/UserContext";
 import Button from "../components/Button";
 import Select from "../components/Select";
-import Alert from "../components/Alert";
+import ErrorAlert from "../components/ErrorAlert";
+import SuccessAlert from "../components/SuccessAlert";
 
 const GroupDetails = () => {
   const { id } = useParams();
@@ -13,6 +14,7 @@ const GroupDetails = () => {
   const { user } = useContext(UserContext);
   const [group, setGroup] = useState();
   const [errors, setErrors] = useState([]);
+  const [successes, setSuccesses] = useState([]);
 
   // For managers only
   const [users, setUsers] = useState([]);
@@ -93,7 +95,6 @@ const GroupDetails = () => {
 
   const addUser = (e) => {
     e.preventDefault();
-    console.log("adding", userId);
     axios
       .post(
         `/api/group/${id}/addUser`,
@@ -106,6 +107,7 @@ const GroupDetails = () => {
       )
       .then(() => {
         fetchDetails();
+        setSuccesses([...successes, `Dodałes uczestnika ${userId}`]);
       })
       .catch((err) => {
         if (err.response) {
@@ -126,6 +128,7 @@ const GroupDetails = () => {
       })
       .then(() => {
         fetchDetails();
+        setSuccesses([...successes, `Usuniełeś uczestnika ${userId}`]);
       })
       .catch((err) => {
         if (err.response) {
@@ -140,7 +143,7 @@ const GroupDetails = () => {
     return (
       <section className="container mx-auto my-8">
         {errors.map((error) => (
-          <Alert text={error} />
+          <ErrorAlert text={error} />
         ))}
         <h1 className="text-4xl font-medium">Loading...</h1>
       </section>
@@ -150,7 +153,11 @@ const GroupDetails = () => {
   return (
     <section className="container mx-auto my-8">
       {errors.map((error) => (
-        <Alert text={error} />
+        <ErrorAlert text={error} />
+      ))}
+
+      {successes.map((success) => (
+        <SuccessAlert text={success} />
       ))}
 
       <h1 className="text-4xl font-medium mb-8">{group.name}</h1>
