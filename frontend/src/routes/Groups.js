@@ -4,6 +4,7 @@ import useRequest from "../hooks/useRequest";
 import Section from "../components/Section";
 import GroupCard from "../components/Groups/GroupCard";
 import GroupCardMini from "../components/Groups/GroupCardMini";
+import CreateGroupModal from "../components/Groups/CreateGroupModal";
 import Button from "../components/Button";
 import UserContext from "../contexts/UserContext";
 import AlertContext from "../contexts/AlertContext";
@@ -31,8 +32,13 @@ const Groups = () => {
           : "Grupy, kierowane przez ciebie"
       }
     >
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex justify-start gap-6 items-center mb-8">
         <Button label="Zmienić wygląd" onClick={changeView} />
+        {!user.isParticipant && (
+          <CreateGroupModal onCreation={fetchGroups}>
+            <Button label="Nowa grupa" />
+          </CreateGroupModal>
+        )}
       </div>
 
       {miniView ? (

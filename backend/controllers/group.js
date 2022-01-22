@@ -3,33 +3,26 @@ const UserModel = require("../models/user");
 
 module.exports = {
   createGroup: (req, res) => {
-    const group = new GroupModel(req.body);
-
     if (req.isParticipant) {
       return res.status(400).send({
         message: "You should be a manager to create groups!",
       });
     }
 
-    UserModel.findById(req.body.manager, (err, user) => {
-      if (err) {
-        res.send(err);
-      } else if (!user) {
-        res.status(404).send({
-          message: "Manager user not found!",
-        });
-      } else if (user.isParticipant) {
-        res.status(400).send({ message: "Provided user is not a manager!" });
-      } else {
-        group.save((err, createdGroup) => {
-          if (err) {
-            res.status(500).send(err);
-          } else {
-            res.send(createdGroup);
-          }
-        });
+    GroupModel.create(
+      {
+        name: req.body.name,
+        description: req.body.description,
+        manager: req.id,
+      },
+      (err) => {
+        if (err) {
+          res.status(500).send(err);
+        } else {
+          res.send();
+        }
       }
-    });
+    );
   },
 
   addUser: (req, res) => {
