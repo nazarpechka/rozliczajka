@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import UserContext from "../contexts/UserContext";
 import Button from "../components/Button";
+import Select from "../components/Select";
 
 const GroupDetails = () => {
   const { id } = useParams();
@@ -12,7 +13,41 @@ const GroupDetails = () => {
   const [group, setGroup] = useState();
   const [errorMessage, setErrorMessage] = useState();
 
-  useEffect(() => {
+  // For managers only
+  const [users, setUsers] = useState([]);
+  const [userId, setUserId] = useState();
+
+  const fetchUsers = () => {
+    if (user.isParticipant) {
+      return;
+    }
+    axios
+      .get("/api/user/list", {
+        headers: {
+          "x-access-token": user.token,
+        },
+      })
+      .then(({ data }) => {
+        const participants = group.participants.map(
+          (participant) => participant._id
+        );
+        const filteredUsers = data.filter(
+          (user) => user.isParticipant && !participants.includes(user._id)
+        );
+
+        setUsers(filteredUsers);
+        setUserId(filteredUsers[0]);
+      })
+      .catch((err) => {
+        if (err.response) {
+          setErrorMessage(err.response.data.message);
+        } else {
+          setErrorMessage(err.message);
+        }
+      });
+  };
+
+  const fetchDetails = () => {
     axios
       .get(`/api/group/${id}`, {
         headers: {
@@ -29,7 +64,10 @@ const GroupDetails = () => {
           setErrorMessage(err.message);
         }
       });
-  }, [user.token, id]);
+  };
+
+  useEffect(fetchDetails, []);
+  useEffect(fetchUsers, [group]);
 
   const leaveGroup = () => {
     axios
@@ -46,6 +84,50 @@ const GroupDetails = () => {
           setErrorMessage(err.response.data.message);
         } else {
           setErrorMessage(err.message);
+        }
+      });
+  };
+
+  const addUser = (e) => {
+    e.preventDefault();
+    axios
+      .post(
+        `/api/group/${id}/addUser`,
+        { userId },
+        {
+          headers: {
+            "x-access-token": user.token,
+          },
+        }
+      )
+      .then(() => {
+        fetchDetails();
+      })
+      .catch((err) => {
+        if (err.response) {
+          console.log(err.response.data.message);
+        } else {
+          console.log(err.message);
+        }
+      });
+  };
+
+  const removeUser = (userId) => {
+    axios
+      .delete(`/api/group/${id}/removeUser`, {
+        data: { userId },
+        headers: {
+          "x-access-token": user.token,
+        },
+      })
+      .then(() => {
+        fetchDetails();
+      })
+      .catch((err) => {
+        if (err.response) {
+          console.log(err.response.data.message);
+        } else {
+          console.log(err.message);
         }
       });
   };
@@ -101,13 +183,44 @@ const GroupDetails = () => {
               {index + 1}. {participant.name} {participant.surname} -{" "}
               {participant.email}{" "}
               {participant.city ? `, ${participant.city}` : ``}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 inline-block hover:text-red-500 hover:cursor-pointer"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                onClick={() => {
+                  removeUser(participant._id);
+                }}
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                  clipRule="evenodd"
+                />
+              </svg>
             </li>
           ))}
         </ul>
       </div>
-      <div className="container mx-auto mt-8 flex">
-        <Button label="Opuść grupę" onClick={leaveGroup} />
-      </div>
+      {user.isParticipant && (
+        <div className="container mx-auto mt-8 flex">
+          <Button label="Opuść grupę" onClick={leaveGroup} />
+        </div>
+      )}
+      {!user.isParticipant && (
+        <div className="container mx-auto mt-8 flex">
+          <form onSubmit={addUser}>
+            <Select
+              label="Uczestnik"
+              name="user"
+              options={users}
+              value={userId}
+              onChange={(e) => setUserId(e.target.value)}
+            />
+            <Button label="Dodaj uczestnika" />
+          </form>
+        </div>
+      )}
     </section>
   );
 };

@@ -1,6 +1,7 @@
 const {
   getGroups,
   getExpenses,
+  getUsers,
   signup,
   login,
 } = require("../controllers/user");
@@ -10,6 +11,8 @@ module.exports = (router) => {
   router.route("/user/groups").get(verifyToken, getGroups);
 
   router.route("/user/expenses").get(verifyToken, getExpenses);
+
+  router.route("/user/list").get(verifyToken, getUsers);
 
   router.route("/user/signup").post(signup);
 

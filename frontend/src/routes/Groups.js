@@ -49,9 +49,11 @@ const Groups = () => {
     <section className="container mx-auto my-8">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-4xl font-medium">
-          Grupy, do których jesteś dodany
+          {user.isParticipant
+            ? "Grupy, do których jesteś dodany"
+            : "Grupy, kierowane przez ciebie"}
         </h1>
-        <Button label="Change view" onClick={changeView} />
+        <Button label="Zmienić wygląd" onClick={changeView} />
       </div>
 
       {miniView ? (

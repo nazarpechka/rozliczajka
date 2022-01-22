@@ -44,7 +44,7 @@ module.exports = {
         res.status(400).send(err);
       } else if (!group) {
         res.status(404).send({ message: "Group not found!" });
-      } else if (group.manager !== req.id) {
+      } else if (!group.manager.equals(req.id)) {
         res
           .status(400)
           .send({ message: "You are not the manager of this group!" });
@@ -60,13 +60,51 @@ module.exports = {
             });
           } else {
             group.participants.push(req.body.userId);
-            group.save((err, updatedGroup) => {
+            group.save((err) => {
               if (err) {
                 res.status(500).send(err);
               } else {
-                res.send(updatedGroup);
+                res.send();
               }
             });
+          }
+        });
+      }
+    });
+  },
+
+  removeUser: (req, res) => {
+    if (req.isParticipant) {
+      return res.status(400).send({
+        message:
+          "You should be a manager to remove participants from the group!",
+      });
+    }
+
+    GroupModel.findById(req.params.id, (err, group) => {
+      if (err) {
+        res.status(400).send(err);
+      } else if (!group) {
+        res.status(404).send({ message: "Group not found!" });
+      } else if (!group.manager.equals(req.id)) {
+        res
+          .status(400)
+          .send({ message: "You are not the manager of this group!" });
+      } else if (!group.participants.includes(req.body.userId)) {
+        res.status(400).send({
+          message: "Provided user is not a participatn of this group!",
+        });
+      } else {
+        const updatedParticipants = group.participants.filter(
+          (participant) => !participant.equals(req.body.userId)
+        );
+
+        group.participants = updatedParticipants;
+        group.save((err) => {
+          if (err) {
+            res.status(500).send(err);
+          } else {
+            res.send();
           }
         });
       }

@@ -8,7 +8,7 @@ const jwt = require("jsonwebtoken");
 
 module.exports = {
   getGroups: (req, res) => {
-    GroupModel.find({ participants: req.id })
+    GroupModel.find({ $or: [{ participants: req.id }, { manager: req.id }] })
       .populate("manager", "name surname")
       .exec((err, groups) => {
         if (err) {
@@ -29,6 +29,22 @@ module.exports = {
         }
       }
     );
+  },
+
+  getUsers: (req, res) => {
+    if (req.isParticipant) {
+      return res.status(400).send({
+        message: "You should be a manager to request user list!",
+      });
+    }
+
+    UserModel.find({}, (err, users) => {
+      if (err) {
+        res.status(500).send(err);
+      } else {
+        res.send(users);
+      }
+    });
   },
 
   signup: (req, res) => {
