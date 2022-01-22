@@ -4,6 +4,7 @@ const {
   removeUser,
   leaveGroup,
   getGroup,
+  deactivateGroup,
 } = require("../controllers/group");
 const verifyToken = require("../middleware/verifyToken");
 
@@ -11,6 +12,8 @@ module.exports = (router) => {
   router.route("/group").post(verifyToken, createGroup);
 
   router.route("/group/:id").get(verifyToken, getGroup);
+
+  router.route("/group/:id").delete(verifyToken, deactivateGroup);
 
   router.route("/group/:id/addUser").post(verifyToken, addUser);
 

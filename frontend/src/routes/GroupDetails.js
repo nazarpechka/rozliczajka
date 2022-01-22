@@ -69,6 +69,15 @@ const GroupDetails = () => {
     },
     onError
   );
+  const deactivateGroup = useRequest(
+    `/api/group/${id}`,
+    "DELETE",
+    () => {
+      fetchDetails();
+      onSuccess(`Deaktyowałeś grupę ${group.name}`);
+    },
+    onError
+  );
 
   useEffect(fetchDetails, []);
   useEffect(() => {
@@ -153,22 +162,31 @@ const GroupDetails = () => {
           <Button className="mt-4" label="Opuść grupę" />
         </ConfirmModal>
       ) : (
-        <div className="mt-8 flex">
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              addUser({ userId });
-            }}
+        <div className="flex justify-between items-end mt-8">
+          <div className="flex">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                addUser({ userId });
+              }}
+            >
+              <Select
+                label="Uczestnik"
+                name="user"
+                options={users}
+                value={userId}
+                onChange={(e) => setUserId(e.target.value)}
+              />
+              <Button label="Dodaj uczestnika" />
+            </form>
+          </div>
+          <ConfirmModal
+            title="Deaktywować grupę?"
+            text="Czy na pewno chcesz deaktywować grupę?"
+            onConfirm={deactivateGroup}
           >
-            <Select
-              label="Uczestnik"
-              name="user"
-              options={users}
-              value={userId}
-              onChange={(e) => setUserId(e.target.value)}
-            />
-            <Button label="Dodaj uczestnika" />
-          </form>
+            <Button label="Deaktywuj grupę" />
+          </ConfirmModal>
         </div>
       )}
     </Section>

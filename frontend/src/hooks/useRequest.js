@@ -20,7 +20,7 @@ const useRequest = (url, method, onSuccess, onError) => {
         onSuccess(data);
       })
       .catch((e) => {
-        onError(e.response ? e.response.data.message : e.message);
+        onError(e.response ? e.response.data.message : e.statusText);
       });
   };
 

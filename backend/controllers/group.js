@@ -25,6 +25,37 @@ module.exports = {
     );
   },
 
+  deactivateGroup: (req, res) => {
+    if (req.isParticipant) {
+      return res.status(400).send({
+        message: "You should be a manager to archives groups!",
+      });
+    }
+
+    GroupModel.findById(req.params.id, (err, group) => {
+      if (err) {
+        res.status(400).send(err);
+      } else if (!group) {
+        res.status(404).send({ message: "Group not found!" });
+      } else if (!group.isActive) {
+        res.status(400).send({ message: "Group is already deactivated!" });
+      } else if (!group.manager.equals(req.id)) {
+        res
+          .status(400)
+          .send({ message: "You are not the manager of this group!" });
+      } else {
+        group.isActive = false;
+        group.save((err) => {
+          if (err) {
+            res.status(500).send(err);
+          } else {
+            res.send();
+          }
+        });
+      }
+    });
+  },
+
   addUser: (req, res) => {
     if (req.isParticipant) {
       return res.status(400).send({
@@ -37,6 +68,10 @@ module.exports = {
         res.status(400).send(err);
       } else if (!group) {
         res.status(404).send({ message: "Group not found!" });
+      } else if (!group.isActive) {
+        res
+          .status(400)
+          .send({ message: "Can't add participant to inactive group!" });
       } else if (!group.manager.equals(req.id)) {
         res
           .status(400)
@@ -83,6 +118,10 @@ module.exports = {
         res.status(400).send(err);
       } else if (!group) {
         res.status(404).send({ message: "Group not found!" });
+      } else if (!group.isActive) {
+        res
+          .status(400)
+          .send({ message: "Can't remove participant from inactive group!" });
       } else if (!group.manager.equals(req.id)) {
         res
           .status(400)
