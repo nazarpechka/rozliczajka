@@ -46,40 +46,47 @@ const Expenses = () => {
 
   return (
     <Section title="Lista wydatków">
-      <div className="inline-block">
-        <Select
-          label="Grupa"
-          name="group"
-          options={groups.map(({ _id, name }) => {
-            return { key: _id, val: name };
-          })}
-          onChange={(e) => {
-            setSelectedGroup(
-              groups.find((group) => group._id === e.target.value)
-            );
-          }}
-        />
+      <div className="mb-4">
+        <div className="inline-block">
+          <Select
+            label="Grupa"
+            name="group"
+            options={groups.map(({ _id, name }) => {
+              return { key: _id, val: name };
+            })}
+            onChange={(e) => {
+              setSelectedGroup(
+                groups.find((group) => group._id === e.target.value)
+              );
+            }}
+          />
+        </div>
+
+        {selectedGroup && user.isParticipant && (
+          <CreateExpenseModal onCreation={fetchExpenses} group={selectedGroup}>
+            <Button label="Nowy wydatek" />
+          </CreateExpenseModal>
+        )}
       </div>
 
-      {selectedGroup && user.isParticipant && (
-        <CreateExpenseModal onCreation={fetchExpenses} group={selectedGroup}>
-          <Button className="mb-8" label="Nowy wydatek" />
-        </CreateExpenseModal>
-      )}
-      <div className="border border-[#AAAAAA]/50 rounded-lg">
-        <div className="grid grid-cols-5 gap-4 px-5 py-7 border border-primary bg-[#E5E5E5]/25 text-lg rounded-lg">
-          <span>Data</span>
-          <span>Status</span>
-          <span>Opis</span>
-          <span>Kwota</span>
-          <span>Podwydatki</span>
+      {expenses.length ? (
+        <div className="border border-[#AAAAAA]/50 rounded-lg">
+          <div className="grid grid-cols-5 gap-4 px-5 py-7 border border-primary bg-[#E5E5E5]/25 text-lg rounded-lg">
+            <span>Data</span>
+            <span>Status</span>
+            <span>Opis</span>
+            <span>Kwota</span>
+            <span>Podwydatki</span>
+          </div>
+          {expenses.map((expense) => (
+            <ExpenseRow key={expense._id} expense={expense} />
+          ))}
         </div>
-        {expenses.length
-          ? expenses.map((expense) => (
-              <ExpenseRow key={expense._id} expense={expense} />
-            ))
-          : null}
-      </div>
+      ) : (
+        <h2 className="text-2xl font-medium">
+          W tej grupie jeszcze nie stworzono wydatków.
+        </h2>
+      )}
     </Section>
   );
 };

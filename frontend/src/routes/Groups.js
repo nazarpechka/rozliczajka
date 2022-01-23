@@ -24,7 +24,7 @@ const Groups = () => {
     setMiniView(!miniView);
   };
 
-  return groups ? (
+  return (
     <Section
       title={
         user.isParticipant
@@ -40,8 +40,12 @@ const Groups = () => {
           </CreateGroupModal>
         )}
       </div>
-
-      {miniView ? (
+      {!groups.length && (
+        <h2 className="text-2xl font-medium">
+          Jeszcze nie zostałeś dodany do grupy.
+        </h2>
+      )}
+      {groups.length && miniView ? (
         <div className="grid grid-cols-4 gap-6">
           {groups.map((group) => (
             <GroupCardMini key={group._id} group={group} />
@@ -55,8 +59,6 @@ const Groups = () => {
         </div>
       )}
     </Section>
-  ) : (
-    <Section title="Loading..." />
   );
 };
 
