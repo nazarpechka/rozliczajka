@@ -14,7 +14,6 @@ const Expenses = () => {
   const { user } = useContext(UserContext);
   const [groups, setGroups] = useState([]);
   const [selectedGroup, setSelectedGroup] = useState({});
-  const [selectedExpenses, setSelectedExpenses] = useState();
   const [expenses, setExpenses] = useState([]);
   const { onError } = useContext(AlertContext);
 
@@ -28,24 +27,24 @@ const Expenses = () => {
     onError
   );
   const fetchExpenses = useRequest(
-    `/api/user/expenses`,
+    `/api/group/${selectedGroup._id}/expenses`,
     "GET",
     setExpenses,
-    onError
+    (err) => {
+      onError(err);
+      setExpenses([]);
+    }
   );
 
+  useEffect(fetchGroups, []);
   useEffect(() => {
-    fetchGroups();
+    if (!selectedGroup._id) {
+      return;
+    }
     fetchExpenses();
-  }, []);
+  }, [selectedGroup]);
 
-  useEffect(() => {
-    setSelectedExpenses(
-      expenses.filter((expense) => expense.group === selectedGroup._id)
-    );
-  }, [expenses, selectedGroup]);
-
-  return selectedExpenses ? (
+  return (
     <Section title="Lista wydatków">
       <div className="inline-block">
         <Select
@@ -68,21 +67,20 @@ const Expenses = () => {
         </CreateExpenseModal>
       )}
       <div className="border border-[#AAAAAA]/50 rounded-lg">
-        <div className="grid grid-cols-6 gap-4 px-5 py-7 border border-primary bg-[#E5E5E5]/25 text-lg rounded-lg">
-          <span>ID</span>
+        <div className="grid grid-cols-5 gap-4 px-5 py-7 border border-primary bg-[#E5E5E5]/25 text-lg rounded-lg">
           <span>Data</span>
           <span>Status</span>
           <span>Opis</span>
           <span>Kwota</span>
-          <span>Twój dług</span>
+          <span>Podwydatki</span>
         </div>
-        {selectedExpenses.map((expense) => (
-          <ExpenseRow key={expense._id} expense={expense} />
-        ))}
+        {expenses.length
+          ? expenses.map((expense) => (
+              <ExpenseRow key={expense._id} expense={expense} />
+            ))
+          : null}
       </div>
     </Section>
-  ) : (
-    <Section title="Loading..." />
   );
 };
 export default Expenses;

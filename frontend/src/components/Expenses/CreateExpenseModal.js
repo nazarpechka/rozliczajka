@@ -18,7 +18,7 @@ const CreateExpenseModal = ({ children, group, onCreation }) => {
     currency: currencies[0],
     subexpenses: [],
   });
-  const [participants, setParticipants] = useState([]);
+  const [users, setUsers] = useState([]);
   const { onError, onSuccess } = useContext(AlertContext);
 
   const createExpense = useRequest(
@@ -41,8 +41,8 @@ const CreateExpenseModal = ({ children, group, onCreation }) => {
   };
 
   const onConfirm = () => {
-    const amount = formData.amount / participants.length;
-    const subexpenses = participants.map((user) => {
+    const amount = formData.amount / users.length;
+    const subexpenses = users.map((user) => {
       return { user, amount };
     });
 
@@ -91,13 +91,13 @@ const CreateExpenseModal = ({ children, group, onCreation }) => {
                 />
                 <Select
                   label="Uczestniki"
-                  name="participants"
+                  name="users"
                   options={group.participants.map(({ _id, name, surname }) => {
                     return { key: _id, val: name + " " + surname };
                   })}
-                  value={participants}
+                  value={users}
                   onChange={(e) => {
-                    setParticipants(
+                    setUsers(
                       [...e.target.options]
                         .filter(({ selected }) => selected)
                         .map(({ value }) => value)
@@ -118,11 +118,11 @@ const CreateExpenseModal = ({ children, group, onCreation }) => {
               <ConfirmModal
                 title="Potwierdzasz naznaczenie wydatku?"
                 text={`Pomiędzy ${
-                  participants.length
+                  users.length
                 } uczestnikami będzie rozdzielony wydatek ${
                   formData.description
                 }. Na każdego zostanie przypisany dług w wysokości ${
-                  formData.amount / participants.length
+                  formData.amount / users.length
                 } ${formData.currency}?`}
                 onConfirm={onConfirm}
               >

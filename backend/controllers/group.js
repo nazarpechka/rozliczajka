@@ -1,5 +1,6 @@
 const GroupModel = require("../models/group");
 const UserModel = require("../models/user");
+const ExpenseModel = require("../models/expense");
 
 module.exports = {
   createGroup: (req, res) => {
@@ -193,5 +194,38 @@ module.exports = {
           res.send(group);
         }
       });
+  },
+
+  getExpenses: (req, res) => {
+    GroupModel.findById(req.params.id, (err, group) => {
+      if (err) {
+        res.status(500).send(err);
+      } else if (!group) {
+        res.status(404).send({ message: "Group not found!" });
+      } else if (
+        !group.participants.find(({ _id }) => _id.equals(req.id)) &&
+        !group.manager._id.equals(req.id)
+      ) {
+        res
+          .status(400)
+          .send({ message: "You are not allowed to view this group!" });
+      } else {
+        ExpenseModel.find({
+          group: req.params.id,
+        })
+          .populate({
+            path: "subexpenses",
+            populate: { path: "user", model: "User" },
+          })
+          .populate("group")
+          .exec((err, expenses) => {
+            if (err) {
+              res.status(500).send(err);
+            } else {
+              res.send(expenses);
+            }
+          });
+      }
+    });
   },
 };

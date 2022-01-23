@@ -1,7 +1,6 @@
 const config = require("../auth.config.js");
 const UserModel = require("../models/user");
 const GroupModel = require("../models/group");
-const ExpenseModel = require("../models/expense");
 
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -18,21 +17,6 @@ module.exports = {
           res.send(groups);
         }
       });
-  },
-
-  getExpenses: (req, res) => {
-    ExpenseModel.find({
-      $or: [
-        { subexpenses: { $elemMatch: { user: req.id } } },
-        { "group.manager": req.id },
-      ],
-    }).exec((err, expenses) => {
-      if (err) {
-        res.status(500).send(err);
-      } else {
-        res.send(expenses);
-      }
-    });
   },
 
   getUsers: (req, res) => {
