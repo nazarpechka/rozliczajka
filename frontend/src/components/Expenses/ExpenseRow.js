@@ -26,11 +26,19 @@ const ExpenseRow = ({ expense }) => {
   };
 
   return (
-    <div className="grid grid-cols-5 gap-4 p-5 border-b border-primary items-center">
+    <div className="grid grid-cols-5 gap-4 p-5 border-b border-primary items-center text-lg">
       <span>{new Date(expense.date).toLocaleDateString()}</span>
-      <span>{expense.status}</span>
-      <span>{expense.description ? expense.description : "nie ma opisu"}</span>
-      <span>{expense.amount + " " + expense.currency}</span>
+      {expense.status === "waiting" ? (
+        <span className="text-orange-500">oczekuje</span>
+      ) : expense.status === "confirmed" ? (
+        <span className="text-green-500">potwierdzony</span>
+      ) : (
+        <span className="text-red-500">odrzucony</span>
+      )}
+      <span>{expense.description ? expense.description : "–"}</span>
+      <span className="text-2xl">
+        {expense.amount + " " + expense.currency}
+      </span>
       <span className="w-64 h-64">
         <Pie data={data} />
       </span>
