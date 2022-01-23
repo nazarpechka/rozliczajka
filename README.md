@@ -1,6 +1,17 @@
 # Rozliczajka
 
-Web application to help with tracking group expenses when traveling.
+Web application to help with tracking group expenses when traveling.  
+
+## Demo
+[Live Demo](https://rozliczajka.herokuapp.com)  
+### Test credentials
+User: traveller79:TravelLover  
+Manager: manager:manager123
+
+## Screenshots
+![homepage](https://user-images.githubusercontent.com/29672031/150695387-038c98d9-4549-4c22-acf3-a3e956d37143.png)
+![expenses](https://user-images.githubusercontent.com/29672031/150695381-1dc8197d-dcb0-481d-8f5c-fbc1a18a8fa4.png)
+![groups](https://user-images.githubusercontent.com/29672031/150695385-09853b58-bf39-4170-a04f-9016dda8d987.png)
 
 ## Technology stack
 
