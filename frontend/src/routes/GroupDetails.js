@@ -44,7 +44,7 @@ const GroupDetails = () => {
   );
   const leaveGroup = useRequest(
     `/api/group/${id}/leave`,
-    "DELETE",
+    "POST",
     () => {
       navigate("/groups");
       onSuccess(`Opuściłeś grupę ${group.name}`);
@@ -52,7 +52,7 @@ const GroupDetails = () => {
     onError
   );
   const addUser = useRequest(
-    `/api/group/${id}/addUser`,
+    `/api/group/${id}/user`,
     "POST",
     () => {
       fetchDetails();
@@ -61,7 +61,7 @@ const GroupDetails = () => {
     onError
   );
   const removeUser = useRequest(
-    `/api/group/${id}/removeUser`,
+    `/api/group/${id}/user`,
     "DELETE",
     () => {
       fetchDetails();
