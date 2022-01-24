@@ -4,7 +4,7 @@ const GroupModel = require("../models/group");
 module.exports = {
   createExpense: async (req, res) => {
     if (!req.isParticipant) {
-      return res.status(400).send({
+      return res.status(403).send({
         message: "You should be a participant to add expenses!",
       });
     }
@@ -16,11 +16,11 @@ module.exports = {
       if (err) {
         res.status(500).send(err);
       } else if (!group) {
-        res.status(400).send({
+        res.status(404).send({
           message: "Group with provided ID doesn't exist",
         });
       } else if (!group.participants.includes(req.id)) {
-        res.status(400).send({
+        res.status(403).send({
           message: "You are not a participant in this group!",
         });
       } else if (!users.every((id) => group.participants.includes(id))) {
@@ -58,7 +58,7 @@ module.exports = {
           });
         } else {
           if (!expense.group.participants.includes(req.id)) {
-            res.status(400).send({
+            res.status(403).send({
               message: "You are not a participant of this expense's group!",
             });
           } else {

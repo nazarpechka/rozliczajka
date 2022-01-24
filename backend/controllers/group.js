@@ -5,7 +5,7 @@ const ExpenseModel = require("../models/expense");
 module.exports = {
   createGroup: (req, res) => {
     if (req.isParticipant) {
-      return res.status(400).send({
+      return res.status(403).send({
         message: "You should be a manager to create groups!",
       });
     }
@@ -28,21 +28,21 @@ module.exports = {
 
   deactivateGroup: (req, res) => {
     if (req.isParticipant) {
-      return res.status(400).send({
+      return res.status(403).send({
         message: "You should be a manager to archives groups!",
       });
     }
 
     GroupModel.findById(req.params.id, (err, group) => {
       if (err) {
-        res.status(400).send(err);
+        res.status(500).send(err);
       } else if (!group) {
         res.status(404).send({ message: "Group not found!" });
       } else if (!group.isActive) {
         res.status(400).send({ message: "Group is already deactivated!" });
       } else if (!group.manager.equals(req.id)) {
         res
-          .status(400)
+          .status(403)
           .send({ message: "You are not the manager of this group!" });
       } else {
         group.isActive = false;
@@ -59,14 +59,14 @@ module.exports = {
 
   addUser: (req, res) => {
     if (req.isParticipant) {
-      return res.status(400).send({
+      return res.status(403).send({
         message: "You should be a manager to add participants to the group!",
       });
     }
 
     GroupModel.findById(req.params.id, (err, group) => {
       if (err) {
-        res.status(400).send(err);
+        res.status(500).send(err);
       } else if (!group) {
         res.status(404).send({ message: "Group not found!" });
       } else if (!group.isActive) {
@@ -75,7 +75,7 @@ module.exports = {
           .send({ message: "Can't add participant to inactive group!" });
       } else if (!group.manager.equals(req.id)) {
         res
-          .status(400)
+          .status(403)
           .send({ message: "You are not the manager of this group!" });
       } else if (group.participants.includes(req.body.userId)) {
         res.status(400).send({
@@ -108,7 +108,7 @@ module.exports = {
 
   removeUser: (req, res) => {
     if (req.isParticipant) {
-      return res.status(400).send({
+      return res.status(403).send({
         message:
           "You should be a manager to remove participants from the group!",
       });
@@ -116,7 +116,7 @@ module.exports = {
 
     GroupModel.findById(req.params.id, (err, group) => {
       if (err) {
-        res.status(400).send(err);
+        res.status(500).send(err);
       } else if (!group) {
         res.status(404).send({ message: "Group not found!" });
       } else if (!group.isActive) {
@@ -125,7 +125,7 @@ module.exports = {
           .send({ message: "Can't remove participant from inactive group!" });
       } else if (!group.manager.equals(req.id)) {
         res
-          .status(400)
+          .status(403)
           .send({ message: "You are not the manager of this group!" });
       } else if (!group.participants.includes(req.body.userId)) {
         res.status(400).send({
@@ -155,7 +155,7 @@ module.exports = {
       } else if (!group) {
         res.status(404).send({ message: "Group not found!" });
       } else if (!group.participants.includes(req.id)) {
-        res.status(400).send({
+        res.status(403).send({
           message: "You are not a participant in this group",
         });
       } else {
@@ -188,7 +188,7 @@ module.exports = {
           !group.manager._id.equals(req.id)
         ) {
           res
-            .status(400)
+            .status(403)
             .send({ message: "You are not allowed to view this group!" });
         } else {
           res.send(group);
@@ -207,7 +207,7 @@ module.exports = {
         !group.manager._id.equals(req.id)
       ) {
         res
-          .status(400)
+          .status(403)
           .send({ message: "You are not allowed to view this group!" });
       } else {
         ExpenseModel.find({

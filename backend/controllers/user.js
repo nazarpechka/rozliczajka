@@ -21,7 +21,7 @@ module.exports = {
 
   getUsers: (req, res) => {
     if (req.isParticipant) {
-      return res.status(400).send({
+      return res.status(403).send({
         message: "You should be a manager to request user list!",
       });
     }
@@ -45,7 +45,7 @@ module.exports = {
     user.save((err, createdUser) => {
       if (err) {
         if (err.code === 11000) {
-          res.status(500).send({ message: "User already exists!" });
+          res.status(400).send({ message: "User already exists!" });
         } else {
           res.status(500).send(err);
         }
@@ -66,7 +66,7 @@ module.exports = {
       } else {
         const isValid = bcrypt.compareSync(req.body.password, user.password);
         if (!isValid) {
-          return res.status(401).send({
+          return res.status(400).send({
             message: "Invalid Password!",
           });
         }
