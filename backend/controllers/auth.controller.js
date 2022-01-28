@@ -1,6 +1,4 @@
 const UserModel = require("../models/user");
-
-const bcrypt = require("bcryptjs");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
 
@@ -11,7 +9,6 @@ module.exports = {
     const user = await UserModel.create({
       ...req.body,
       isParticipant: true,
-      password: bcrypt.hashSync(req.body.password, 10),
     }).catch(next);
 
     res.send(user);

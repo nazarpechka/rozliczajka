@@ -27,7 +27,7 @@ const Expenses = () => {
     onError
   );
   const fetchExpenses = useRequest(
-    `/api/groups/${selectedGroup._id}/expenses`,
+    `/api/groups/${selectedGroup ? selectedGroup._id : ""}/expenses`,
     "GET",
     setExpenses,
     (err) => {
@@ -38,11 +38,15 @@ const Expenses = () => {
 
   useEffect(fetchGroups, []);
   useEffect(() => {
-    if (!selectedGroup._id) {
+    if (!selectedGroup) {
       return;
     }
     fetchExpenses();
   }, [selectedGroup]);
+
+  if (!groups.length) {
+    return <Section title="Lista wydatków" />;
+  }
 
   return (
     <Section title="Lista wydatków">

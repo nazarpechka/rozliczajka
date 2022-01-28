@@ -4,7 +4,6 @@ const passportJWT = require("passport-jwt");
 const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
 const UserModel = require("../models/user");
-const bcrypt = require("bcryptjs");
 
 passport.use(
   new LocalStrategy(
@@ -18,7 +17,7 @@ passport.use(
         return done(null, false, "Incorrect login!");
       }
 
-      const isValid = await bcrypt.compare(password, user.password).catch(done);
+      const isValid = await user.validatePassword(password).catch(done);
       if (!isValid) {
         return done(null, false, "Incorrect password!");
       }
@@ -41,7 +40,7 @@ passport.use(
         if (!user) {
           return done(null, false);
         }
-        console.log("jwt verified for ", user);
+
         return done(null, user);
       });
     }
