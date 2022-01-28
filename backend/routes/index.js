@@ -1,11 +1,13 @@
-const user = require("./user");
-const group = require("./group");
-const expense = require("./expense");
+const users = require("./users.route");
+const groups = require("./groups.route");
+const expenses = require("./expenses.route");
+const auth = require("./auth.route");
 
 module.exports = (router) => {
-  user(router);
-  group(router);
-  expense(router);
+  users(router);
+  groups(router);
+  expenses(router);
+  auth(router);
 
   return router;
 };

@@ -39,7 +39,7 @@ module.exports = {
     res.send(group);
   },
 
-  addUser: async (req, res, next) => {
+  addParticipant: async (req, res, next) => {
     const group = await GroupModel.findById(req.params.id).catch(next);
 
     if (!group) {
@@ -84,7 +84,7 @@ module.exports = {
     res.send(group);
   },
 
-  removeUser: async (req, res, next) => {
+  removeParticipant: async (req, res, next) => {
     const group = await GroupModel.findById(req.params.id).catch(next);
 
     if (!group) {

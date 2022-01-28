@@ -21,9 +21,14 @@ const GroupDetails = () => {
   const [userId, setUserId] = useState();
 
   // Requests
-  const fetchDetails = useRequest(`/api/group/${id}`, "GET", setGroup, onError);
+  const fetchDetails = useRequest(
+    `/api/groups/${id}`,
+    "GET",
+    setGroup,
+    onError
+  );
   const fetchUsers = useRequest(
-    "/api/user/list",
+    "/api/users",
     "GET",
     (users) => {
       const participants = group.participants.map(
@@ -43,7 +48,7 @@ const GroupDetails = () => {
     onError
   );
   const leaveGroup = useRequest(
-    `/api/group/${id}/leave`,
+    `/api/groups/${id}/leave`,
     "POST",
     () => {
       navigate("/groups");
@@ -51,8 +56,8 @@ const GroupDetails = () => {
     },
     onError
   );
-  const addUser = useRequest(
-    `/api/group/${id}/user`,
+  const addParticipant = useRequest(
+    `/api/groups/${id}/participants`,
     "POST",
     () => {
       fetchDetails();
@@ -60,8 +65,8 @@ const GroupDetails = () => {
     },
     onError
   );
-  const removeUser = useRequest(
-    `/api/group/${id}/user`,
+  const removeParticipant = useRequest(
+    `/api/groups/${id}/participants`,
     "DELETE",
     () => {
       fetchDetails();
@@ -70,7 +75,7 @@ const GroupDetails = () => {
     onError
   );
   const deactivateGroup = useRequest(
-    `/api/group/${id}`,
+    `/api/groups/${id}`,
     "DELETE",
     () => {
       fetchDetails();
@@ -132,7 +137,7 @@ const GroupDetails = () => {
                     participant.name + " " + participant.surname
                   }?`}
                   onConfirm={() => {
-                    removeUser({ userId: participant._id });
+                    removeParticipant({ userId: participant._id });
                   }}
                 >
                   <svg
@@ -167,7 +172,7 @@ const GroupDetails = () => {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                addUser({ userId });
+                addParticipant({ userId });
               }}
             >
               <div className="inline-block">

@@ -20,7 +20,7 @@ const Signup = () => {
 
   const { onError, onSuccess } = useContext(AlertContext);
   const signup = useRequest(
-    "/api/user/signup",
+    "/api/auth/signup",
     "POST",
     () => onSuccess("Pomyślnie zarejestrowano! Teraz możesz zalogować się."),
     onError

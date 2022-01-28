@@ -18,7 +18,7 @@ const Expenses = () => {
   const { onError } = useContext(AlertContext);
 
   const fetchGroups = useRequest(
-    `/api/user/groups`,
+    `/api/users/${user._id}/groups`,
     "GET",
     (groups) => {
       setGroups(groups);
@@ -27,7 +27,7 @@ const Expenses = () => {
     onError
   );
   const fetchExpenses = useRequest(
-    `/api/group/${selectedGroup._id}/expenses`,
+    `/api/groups/${selectedGroup._id}/expenses`,
     "GET",
     setExpenses,
     (err) => {

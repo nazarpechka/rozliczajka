@@ -14,7 +14,12 @@ const Groups = () => {
   const [groups, setGroups] = useState([]);
   const [miniView, setMiniView] = useState(true);
   const { onError } = useContext(AlertContext);
-  const fetchGroups = useRequest(`/api/user/groups`, "GET", setGroups, onError);
+  const fetchGroups = useRequest(
+    `/api/users/${user._id}/groups`,
+    "GET",
+    setGroups,
+    onError
+  );
 
   useEffect(() => {
     fetchGroups();

@@ -22,7 +22,7 @@ const CreateExpenseModal = ({ children, group, onCreation }) => {
   const { onError, onSuccess } = useContext(AlertContext);
 
   const createExpense = useRequest(
-    `/api/expense/`,
+    `/api/expenses/`,
     "POST",
     () => {
       onSuccess(`Utworzony wydatek o kwocie ${formData.amount}`);

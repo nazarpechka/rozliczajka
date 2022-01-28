@@ -16,7 +16,7 @@ const Login = () => {
   });
 
   const { onError } = useContext(AlertContext);
-  const login = useRequest("/api/user/login", "POST", onLogin, onError);
+  const login = useRequest("/api/auth/login", "POST", onLogin, onError);
 
   const onChange = (e) => {
     const target = e.target;

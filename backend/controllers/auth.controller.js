@@ -1,6 +1,5 @@
 const config = require("../auth.config.js");
 const UserModel = require("../models/user");
-const GroupModel = require("../models/group");
 
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -8,23 +7,6 @@ const jwt = require("jsonwebtoken");
 const { BadRequestError, NotFoundError } = require("../utils/errors");
 
 module.exports = {
-  getGroups: async (req, res, next) => {
-    const groups = await GroupModel.find({
-      $or: [{ participants: req.id }, { manager: req.id }],
-    })
-      .populate("manager", "name surname")
-      .populate("participants", "_id name surname")
-      .catch(next);
-
-    res.send(groups);
-  },
-
-  getUsers: async (req, res, next) => {
-    const users = await UserModel.find().catch(next);
-
-    res.send(users);
-  },
-
   signup: async (req, res, next) => {
     const user = await UserModel.create({
       ...req.body,

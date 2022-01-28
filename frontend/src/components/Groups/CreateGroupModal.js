@@ -15,7 +15,7 @@ const CreateGroupModal = ({ children, onCreation }) => {
   const { onError, onSuccess } = useContext(AlertContext);
 
   const createGroup = useRequest(
-    `/api/group/`,
+    `/api/groups/`,
     "POST",
     () => {
       onSuccess(`Utworzona grupa ${formData.name}`);
