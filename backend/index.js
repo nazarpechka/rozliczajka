@@ -5,6 +5,7 @@ const logger = require("morgan");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
+const errorHandler = require("./middleware/errorHandler");
 const setRoutes = require("./routes/index");
 
 const router = express.Router();
@@ -21,7 +22,9 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.use("/api", setRoutes(router));
+app.use("/api", errorHandler);
 
+// Heroku deployment
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/build/")));
 

@@ -18,13 +18,13 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
+    unique: true,
     trim: true,
     maxLength: 32,
     validate: {
       validator: isEmail,
       message: "Invalid email.",
     },
-    unique: true,
   },
   name: {
     type: String,

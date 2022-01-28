@@ -2,230 +2,189 @@ const GroupModel = require("../models/group");
 const UserModel = require("../models/user");
 const ExpenseModel = require("../models/expense");
 
+const {
+  BadRequestError,
+  NotFoundError,
+  ForbiddenError,
+} = require("../utils/errors");
+
 module.exports = {
-  createGroup: (req, res) => {
-    if (req.isParticipant) {
-      return res.status(403).send({
-        message: "You should be a manager to create groups!",
-      });
+  createGroup: async (req, res, next) => {
+    const group = await GroupModel.create({
+      name: req.body.name,
+      description: req.body.description,
+      manager: req.id,
+    }).catch(next);
+    res.send(group);
+  },
+
+  deactivateGroup: async (req, res, next) => {
+    const group = await GroupModel.findById(req.params.id).catch(next);
+
+    if (!group) {
+      return next(new NotFoundError("Group not found!"));
     }
 
-    GroupModel.create(
-      {
-        name: req.body.name,
-        description: req.body.description,
-        manager: req.id,
-      },
-      (err) => {
-        if (err) {
-          res.status(500).send(err);
-        } else {
-          res.send();
-        }
-      }
+    if (!group.isActive) {
+      return next(new BadRequestError("Group is already deactivated!"));
+    }
+
+    if (!group.manager.equals(req.id)) {
+      return next(new ForbiddenError("You are not the manager of this group!"));
+    }
+
+    group.isActive = false;
+    await group.save().catch(next);
+
+    res.send(group);
+  },
+
+  addUser: async (req, res, next) => {
+    const group = await GroupModel.findById(req.params.id).catch(next);
+
+    if (!group) {
+      return next(new NotFoundError("Group not found!"));
+    }
+
+    if (!group.isActive) {
+      return next(
+        new BadRequestError("Can't add participant to inactive group!")
+      );
+    }
+
+    if (!group.manager.equals(req.id)) {
+      return next(new ForbiddenError("You are not the manager of this group!"));
+    }
+
+    if (group.participants.includes(req.body.userId)) {
+      return next(
+        new BadRequestError(
+          "Provided user is already a participant in this group!"
+        )
+      );
+    }
+
+    const user = await UserModel.findById(req.body.userId).catch(next);
+
+    if (!user) {
+      return next(new NotFoundError("User not found!"));
+    }
+
+    if (!user.isParticipant) {
+      return next(
+        new BadRequestError(
+          "You can't add a manager to the group participants!"
+        )
+      );
+    }
+
+    group.participants.push(req.body.userId);
+    await group.save().catch(next);
+
+    res.send(group);
+  },
+
+  removeUser: async (req, res, next) => {
+    const group = await GroupModel.findById(req.params.id).catch(next);
+
+    if (!group) {
+      return next(new NotFoundError("Group not found!"));
+    }
+
+    if (!group.isActive) {
+      return next(
+        new BadRequestError("Can't remove participant from inactive group!")
+      );
+    }
+
+    if (!group.manager.equals(req.id)) {
+      return next(new ForbiddenError("You are not the manager of this group!"));
+    }
+
+    if (!group.participants.includes(req.body.userId)) {
+      return next(
+        new BadRequestError("Provided user is not a participatn of this group!")
+      );
+    }
+
+    const updatedParticipants = group.participants.filter(
+      (participant) => !participant.equals(req.body.userId)
     );
+
+    group.participants = updatedParticipants;
+    await group.save().catch(next);
+
+    res.send(group);
   },
 
-  deactivateGroup: (req, res) => {
-    if (req.isParticipant) {
-      return res.status(403).send({
-        message: "You should be a manager to archives groups!",
-      });
+  leaveGroup: async (req, res, next) => {
+    const group = await GroupModel.findById(req.params.id).catch(next);
+
+    if (!group) {
+      return next(new NotFoundError("Group not found!"));
     }
 
-    GroupModel.findById(req.params.id, (err, group) => {
-      if (err) {
-        res.status(500).send(err);
-      } else if (!group) {
-        res.status(404).send({ message: "Group not found!" });
-      } else if (!group.isActive) {
-        res.status(400).send({ message: "Group is already deactivated!" });
-      } else if (!group.manager.equals(req.id)) {
-        res
-          .status(403)
-          .send({ message: "You are not the manager of this group!" });
-      } else {
-        group.isActive = false;
-        group.save((err) => {
-          if (err) {
-            res.status(500).send(err);
-          } else {
-            res.send();
-          }
-        });
-      }
-    });
-  },
-
-  addUser: (req, res) => {
-    if (req.isParticipant) {
-      return res.status(403).send({
-        message: "You should be a manager to add participants to the group!",
-      });
+    if (!group.participants.includes(req.id)) {
+      return next(
+        new ForbiddenError("You are not a participant in this group")
+      );
     }
 
-    GroupModel.findById(req.params.id, (err, group) => {
-      if (err) {
-        res.status(500).send(err);
-      } else if (!group) {
-        res.status(404).send({ message: "Group not found!" });
-      } else if (!group.isActive) {
-        res
-          .status(400)
-          .send({ message: "Can't add participant to inactive group!" });
-      } else if (!group.manager.equals(req.id)) {
-        res
-          .status(403)
-          .send({ message: "You are not the manager of this group!" });
-      } else if (group.participants.includes(req.body.userId)) {
-        res.status(400).send({
-          message: "Provided user is already a participant in this group!",
-        });
-      } else {
-        UserModel.findById(req.body.userId, (err, user) => {
-          if (err) {
-            res.status(500).send(err);
-          } else if (!user) {
-            res.status(404).send({ message: "User not found!" });
-          } else if (!user.isParticipant) {
-            res.status(400).send({
-              message: "You can't add a manager to the group participants!",
-            });
-          } else {
-            group.participants.push(req.body.userId);
-            group.save((err) => {
-              if (err) {
-                res.status(500).send(err);
-              } else {
-                res.send();
-              }
-            });
-          }
-        });
-      }
-    });
+    const updatedParticipants = group.participants.filter(
+      (participant) => !participant.equals(req.id)
+    );
+
+    group.participants = updatedParticipants;
+    await group.save().catch(next);
+
+    res.send(group);
   },
 
-  removeUser: (req, res) => {
-    if (req.isParticipant) {
-      return res.status(403).send({
-        message:
-          "You should be a manager to remove participants from the group!",
-      });
-    }
-
-    GroupModel.findById(req.params.id, (err, group) => {
-      if (err) {
-        res.status(500).send(err);
-      } else if (!group) {
-        res.status(404).send({ message: "Group not found!" });
-      } else if (!group.isActive) {
-        res
-          .status(400)
-          .send({ message: "Can't remove participant from inactive group!" });
-      } else if (!group.manager.equals(req.id)) {
-        res
-          .status(403)
-          .send({ message: "You are not the manager of this group!" });
-      } else if (!group.participants.includes(req.body.userId)) {
-        res.status(400).send({
-          message: "Provided user is not a participatn of this group!",
-        });
-      } else {
-        const updatedParticipants = group.participants.filter(
-          (participant) => !participant.equals(req.body.userId)
-        );
-
-        group.participants = updatedParticipants;
-        group.save((err) => {
-          if (err) {
-            res.status(500).send(err);
-          } else {
-            res.send();
-          }
-        });
-      }
-    });
-  },
-
-  leaveGroup: (req, res) => {
-    GroupModel.findById(req.params.id, (err, group) => {
-      if (err) {
-        res.status(500).send(err);
-      } else if (!group) {
-        res.status(404).send({ message: "Group not found!" });
-      } else if (!group.participants.includes(req.id)) {
-        res.status(403).send({
-          message: "You are not a participant in this group",
-        });
-      } else {
-        const updatedParticipants = group.participants.filter(
-          (participant) => !participant.equals(req.id)
-        );
-        group.participants = updatedParticipants;
-        group.save((err) => {
-          if (err) {
-            res.status(500).send(err);
-          } else {
-            res.send();
-          }
-        });
-      }
-    });
-  },
-
-  getGroup: (req, res) => {
-    GroupModel.findById(req.params.id)
+  getGroup: async (req, res, next) => {
+    const group = await GroupModel.findById(req.params.id)
       .populate("manager", "name surname email city")
       .populate("participants", "name surname email city")
-      .exec((err, group) => {
-        if (err) {
-          res.status(500).send(err);
-        } else if (!group) {
-          res.status(404).send({ message: "Group not found!" });
-        } else if (
-          !group.participants.find(({ _id }) => _id.equals(req.id)) &&
-          !group.manager._id.equals(req.id)
-        ) {
-          res
-            .status(403)
-            .send({ message: "You are not allowed to view this group!" });
-        } else {
-          res.send(group);
-        }
-      });
+      .catch(next);
+
+    if (!group) {
+      return next(new NotFoundError("Group not found!"));
+    }
+
+    if (
+      !group.participants.find(({ _id }) => _id.equals(req.id)) &&
+      !group.manager._id.equals(req.id)
+    ) {
+      return next(new ForbiddenError("You are not allowed to view this group"));
+    }
+
+    res.send(group);
   },
 
-  getExpenses: (req, res) => {
-    GroupModel.findById(req.params.id, (err, group) => {
-      if (err) {
-        res.status(500).send(err);
-      } else if (!group) {
-        res.status(404).send({ message: "Group not found!" });
-      } else if (
-        !group.participants.find(({ _id }) => _id.equals(req.id)) &&
-        !group.manager._id.equals(req.id)
-      ) {
-        res
-          .status(403)
-          .send({ message: "You are not allowed to view this group!" });
-      } else {
-        ExpenseModel.find({
-          group: req.params.id,
-        })
-          .populate({
-            path: "subexpenses",
-            populate: { path: "user", model: "User" },
-          })
-          .populate("group")
-          .exec((err, expenses) => {
-            if (err) {
-              res.status(500).send(err);
-            } else {
-              res.send(expenses);
-            }
-          });
-      }
-    });
+  getExpenses: async (req, res, next) => {
+    const group = await GroupModel.findById(req.params.id).catch(next);
+
+    if (!group) {
+      return next(new NotFoundError("Group not found!"));
+    }
+
+    if (
+      !group.participants.find(({ _id }) => _id.equals(req.id)) &&
+      !group.manager._id.equals(req.id)
+    ) {
+      return next(
+        new ForbiddenError("You are not allowed to view this group!")
+      );
+    }
+
+    const expenses = await ExpenseModel.find({
+      group: req.params.id,
+    })
+      .populate({
+        path: "subexpenses",
+        populate: { path: "user", model: "User" },
+      })
+      .populate("group")
+      .catch(next);
+    res.send(expenses);
   },
 };

@@ -5,85 +5,62 @@ const GroupModel = require("../models/group");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
+const { BadRequestError, NotFoundError } = require("../utils/errors");
+
 module.exports = {
-  getGroups: (req, res) => {
-    GroupModel.find({ $or: [{ participants: req.id }, { manager: req.id }] })
+  getGroups: async (req, res, next) => {
+    const groups = await GroupModel.find({
+      $or: [{ participants: req.id }, { manager: req.id }],
+    })
       .populate("manager", "name surname")
       .populate("participants", "_id name surname")
-      .exec((err, groups) => {
-        if (err) {
-          res.status(500).send(err);
-        } else {
-          res.send(groups);
-        }
-      });
+      .catch(next);
+
+    res.send(groups);
   },
 
-  getUsers: (req, res) => {
-    if (req.isParticipant) {
-      return res.status(403).send({
-        message: "You should be a manager to request user list!",
-      });
-    }
+  getUsers: async (req, res, next) => {
+    const users = await UserModel.find().catch(next);
 
-    UserModel.find({}, (err, users) => {
-      if (err) {
-        res.status(500).send(err);
-      } else {
-        res.send(users);
-      }
-    });
+    res.send(users);
   },
 
-  signup: (req, res) => {
-    const user = new UserModel({
+  signup: async (req, res, next) => {
+    const user = await UserModel.create({
       ...req.body,
       isParticipant: true,
       password: bcrypt.hashSync(req.body.password, 8),
-    });
+    }).catch(next);
 
-    user.save((err, createdUser) => {
-      if (err) {
-        if (err.code === 11000) {
-          res.status(400).send({ message: "User already exists!" });
-        } else {
-          res.status(500).send(err);
-        }
-      } else {
-        res.send(createdUser);
-      }
-    });
+    res.send(user);
   },
 
-  login: (req, res) => {
-    UserModel.findOne({ login: req.body.login }, (err, user) => {
-      if (err) {
-        res.status(500).send(err);
-      } else if (!user) {
-        res.status(404).send({
-          message: "User not found!",
-        });
-      } else {
-        const isValid = bcrypt.compareSync(req.body.password, user.password);
-        if (!isValid) {
-          return res.status(400).send({
-            message: "Invalid Password!",
-          });
-        }
+  login: async (req, res, next) => {
+    const user = await UserModel.findOne({ login: req.body.login }).catch(next);
 
-        const token = jwt.sign(
-          { id: user.id, isParticipant: user.isParticipant },
-          config.secret,
-          {
-            expiresIn: 86400,
-          }
-        );
+    if (!user) {
+      return next(new NotFoundError("Invalid login!"));
+    }
 
-        res.send({
-          ...user.toObject(),
-          token,
-        });
+    const isValid = await bcrypt
+      .compare(req.body.password, user.password)
+      .catch(next);
+
+    if (!isValid) {
+      return next(new BadRequestError("Invalid Password!"));
+    }
+
+    const token = jwt.sign(
+      { id: user.id, isParticipant: user.isParticipant },
+      config.secret,
+      {
+        expiresIn: 86400,
       }
+    );
+
+    res.send({
+      ...user.toObject(),
+      token,
     });
   },
 };
