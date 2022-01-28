@@ -18,7 +18,7 @@ module.exports = {
       return next(new NotFoundError("Group with provided ID doesn't exist"));
     }
 
-    if (!group.participants.includes(req.id)) {
+    if (!group.participants.includes(req.user._id)) {
       return next(
         new ForbiddenError("You are not a participant in this group!")
       );
@@ -53,7 +53,7 @@ module.exports = {
       return next(new NotFoundError("Expense not found!"));
     }
 
-    if (!expense.group.participants.includes(req.id)) {
+    if (!expense.group.participants.includes(req.user._id)) {
       return next(
         new ForbiddenError("You are not a participant of this expense's group!")
       );

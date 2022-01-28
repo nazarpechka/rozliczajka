@@ -12,7 +12,7 @@ module.exports = {
 
   getUserGroups: async (req, res, next) => {
     // Participants can't see other user's groups, but managers can
-    if (req.isParticipant && req.id !== req.params.id) {
+    if (req.user.isParticipant && !req.user._id.equals(req.params.id)) {
       return next(
         new BadRequestError("You are not allowed to see this user's groups!")
       );

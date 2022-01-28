@@ -13,7 +13,7 @@ module.exports = {
     const group = await GroupModel.create({
       name: req.body.name,
       description: req.body.description,
-      manager: req.id,
+      manager: req.user._id,
     }).catch(next);
     res.send(group);
   },
@@ -29,7 +29,7 @@ module.exports = {
       return next(new BadRequestError("Group is already deactivated!"));
     }
 
-    if (!group.manager.equals(req.id)) {
+    if (!group.manager.equals(req.user._id)) {
       return next(new ForbiddenError("You are not the manager of this group!"));
     }
 
@@ -52,7 +52,7 @@ module.exports = {
       );
     }
 
-    if (!group.manager.equals(req.id)) {
+    if (!group.manager.equals(req.user._id)) {
       return next(new ForbiddenError("You are not the manager of this group!"));
     }
 
@@ -97,7 +97,7 @@ module.exports = {
       );
     }
 
-    if (!group.manager.equals(req.id)) {
+    if (!group.manager.equals(req.user._id)) {
       return next(new ForbiddenError("You are not the manager of this group!"));
     }
 
@@ -124,14 +124,14 @@ module.exports = {
       return next(new NotFoundError("Group not found!"));
     }
 
-    if (!group.participants.includes(req.id)) {
+    if (!group.participants.includes(req.user._id)) {
       return next(
         new ForbiddenError("You are not a participant in this group")
       );
     }
 
     const updatedParticipants = group.participants.filter(
-      (participant) => !participant.equals(req.id)
+      (participant) => !participant.equals(req.user._id)
     );
 
     group.participants = updatedParticipants;
@@ -151,8 +151,8 @@ module.exports = {
     }
 
     if (
-      !group.participants.find(({ _id }) => _id.equals(req.id)) &&
-      !group.manager._id.equals(req.id)
+      !group.participants.find(({ _id }) => _id.equals(req.user._id)) &&
+      !group.manager._id.equals(req.user._id)
     ) {
       return next(new ForbiddenError("You are not allowed to view this group"));
     }
@@ -168,8 +168,8 @@ module.exports = {
     }
 
     if (
-      !group.participants.find(({ _id }) => _id.equals(req.id)) &&
-      !group.manager._id.equals(req.id)
+      !group.participants.find(({ _id }) => _id.equals(req.user._id)) &&
+      !group.manager._id.equals(req.user._id)
     ) {
       return next(
         new ForbiddenError("You are not allowed to view this group!")

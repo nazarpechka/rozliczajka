@@ -7,22 +7,22 @@ const {
   getExpenses,
   deactivateGroup,
 } = require("../controllers/groups.controller");
-const verifyToken = require("../middleware/verifyToken");
+const authenticate = require("../middleware/authenticate");
 const isParticipant = require("../middleware/isParticipant");
 const isManager = require("../middleware/isManager");
 
 module.exports = (router) => {
-  router.route("/groups").post(verifyToken, isManager, createGroup);
-  router.route("/groups/:id").get(verifyToken, getGroup);
-  router.route("/groups/:id").delete(verifyToken, isManager, deactivateGroup);
-  router.route("/groups/:id/expenses").get(verifyToken, getExpenses);
+  router.route("/groups").post(authenticate, isManager, createGroup);
+  router.route("/groups/:id").get(authenticate, getGroup);
+  router.route("/groups/:id").delete(authenticate, isManager, deactivateGroup);
+  router.route("/groups/:id/expenses").get(authenticate, getExpenses);
   router
     .route("/groups/:id/participants")
-    .post(verifyToken, isManager, addParticipant);
+    .post(authenticate, isManager, addParticipant);
   router
     .route("/groups/:id/participants")
-    .delete(verifyToken, isManager, removeParticipant);
+    .delete(authenticate, isManager, removeParticipant);
   router
     .route("/groups/:id/leave")
-    .post(verifyToken, isParticipant, leaveGroup);
+    .post(authenticate, isParticipant, leaveGroup);
 };

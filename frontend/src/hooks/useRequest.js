@@ -11,7 +11,7 @@ const useRequest = (url, method, onSuccess, onError) => {
       method,
       data,
       headers: {
-        "x-access-token": user ? user.token : "",
+        Authorization: user ? "Bearer " + user.token : "",
       },
     };
 

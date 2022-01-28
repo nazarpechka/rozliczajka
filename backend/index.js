@@ -3,9 +3,10 @@ const path = require("path");
 const helmet = require("helmet");
 const compression = require("compression");
 const logger = require("morgan");
-const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
+require("./config/passport");
+require("./config/db");
 
 const errorHandler = require("./middleware/errorHandler");
 const setRoutes = require("./routes");
@@ -14,9 +15,6 @@ const router = express.Router();
 const app = express();
 
 const PORT = process.env.PORT;
-const MONGO_URL = process.env.MONGO_URL;
-
-mongoose.connect(MONGO_URL);
 
 app.use(compression());
 app.use(helmet());

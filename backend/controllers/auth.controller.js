@@ -1,48 +1,38 @@
-const config = require("../auth.config.js");
 const UserModel = require("../models/user");
 
 const bcrypt = require("bcryptjs");
+const passport = require("passport");
 const jwt = require("jsonwebtoken");
 
-const { BadRequestError, NotFoundError } = require("../utils/errors");
+const { BadRequestError } = require("../utils/errors");
 
 module.exports = {
   signup: async (req, res, next) => {
     const user = await UserModel.create({
       ...req.body,
       isParticipant: true,
-      password: bcrypt.hashSync(req.body.password, 8),
+      password: bcrypt.hashSync(req.body.password, 10),
     }).catch(next);
 
     res.send(user);
   },
 
   login: async (req, res, next) => {
-    const user = await UserModel.findOne({ login: req.body.login }).catch(next);
-
-    if (!user) {
-      return next(new NotFoundError("Invalid login!"));
-    }
-
-    const isValid = await bcrypt
-      .compare(req.body.password, user.password)
-      .catch(next);
-
-    if (!isValid) {
-      return next(new BadRequestError("Invalid Password!"));
-    }
-
-    const token = jwt.sign(
-      { id: user.id, isParticipant: user.isParticipant },
-      config.secret,
-      {
-        expiresIn: 86400,
+    passport.authenticate("local", { session: false }, (err, user, info) => {
+      if (err || !user) {
+        return next(new BadRequestError(info));
       }
-    );
 
-    res.send({
-      ...user.toObject(),
-      token,
-    });
+      req.login(user, { session: false }, (err) => {
+        if (err) {
+          return next(err);
+        }
+
+        const token = jwt.sign({ sub: user._id }, process.env.SECRET_KEY, {
+          expiresIn: 86400,
+        });
+        return res.json({ ...user.toObject(), token });
+      });
+    })(req, res);
   },
 };

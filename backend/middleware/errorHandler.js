@@ -1,5 +1,5 @@
+// eslint-disable-next-line no-unused-vars
 module.exports = (error, req, res, next) => {
-  console.error("error occured", error);
   // Mongoose related errors
   if (error.name === "ValidationError") {
     error.statusCode = 400;
