@@ -12,7 +12,7 @@
     "type": "git",
     "url": "git+https://github.com/nazarpechka/rozliczajka.git"
   },
-  "author": "Nazar Pechevystyi, Daniil Gordetsky, Sofiia Malyshok",
+  "author": "Nazar Pechevystyi, Sofiia Malyshok",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/nazarpechka/rozliczajka/issues"
@@ -25,8 +25,5 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.28.0",
     "prettier": "^2.5.1"
-  },
-  "dependencies": {
-    "@tailwindcss/forms": "^0.4.0"
   }
 }
