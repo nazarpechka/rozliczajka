@@ -1,14 +1,7 @@
-const app = require("../app");
-const request = require("supertest");
+const agent = require("./config/setup");
 
 describe("POST /groups", () => {
   test("No token provided", (done) => {
-    request(app)
-      .post("/api/groups")
-      .expect(401)
-      .end((err) => {
-        if (err) return done(err);
-        return done();
-      });
+    agent.post("/api/groups").expect(401, done);
   });
 });

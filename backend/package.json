@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon app.js",
-    "test": "jest"
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "export NODE_ENV=test && jest --runInBand --watchAll --detectOpenHandles"
   },
   "engines": {
     "node": "17.x"
@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "jest": "^27.4.7",
+    "mongodb-memory-server": "^8.2.0",
     "nodemon": "^2.0.15",
     "supertest": "^6.2.2"
   }
