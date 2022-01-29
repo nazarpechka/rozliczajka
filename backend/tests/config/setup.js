@@ -11,4 +11,4 @@ afterAll(async () => {
   await db.disconnect();
 });
 
-module.exports = agent;
+module.exports = { agent, app, clear: db.clear };

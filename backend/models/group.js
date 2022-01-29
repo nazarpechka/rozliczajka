@@ -4,7 +4,9 @@ const groupSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
+    minLength: 3,
     trim: true,
+    unique: true,
   },
   creationDate: {
     type: Date,
@@ -17,7 +19,6 @@ const groupSchema = new mongoose.Schema({
   },
   isActive: {
     type: Boolean,
-    required: true,
     default: true,
   },
   participants: {
@@ -29,6 +30,13 @@ const groupSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+});
+
+groupSchema.pre("save", async function (next) {
+  if (this.isModified("isActive")) return next();
+
+  this.isActive = true;
+  next();
 });
 
 module.exports = mongoose.model("Group", groupSchema);

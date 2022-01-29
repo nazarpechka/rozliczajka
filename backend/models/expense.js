@@ -30,6 +30,7 @@ const expenseSchema = mongoose.Schema({
   group: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Group",
+    required: true,
   },
   subexpenses: {
     type: [

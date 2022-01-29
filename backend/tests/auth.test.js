@@ -1,4 +1,4 @@
-const agent = require("./config/setup");
+const { agent } = require("./config/setup");
 
 const signup = {
   login: "test",
