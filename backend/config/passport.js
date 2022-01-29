@@ -14,12 +14,12 @@ passport.use(
     async (login, password, done) => {
       const user = await UserModel.findOne({ login }).catch(done);
       if (!user) {
-        return done(null, false, "Incorrect login!");
+        return done(null, false, { message: "Incorrect login!" });
       }
 
       const isValid = await user.validatePassword(password).catch(done);
       if (!isValid) {
-        return done(null, false, "Incorrect password!");
+        return done(null, false, { message: "Incorrect password!" });
       }
       done(null, user);
     }

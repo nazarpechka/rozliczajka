@@ -6,18 +6,25 @@ const { BadRequestError } = require("../utils/errors");
 
 module.exports = {
   signup: async (req, res, next) => {
-    const user = await UserModel.create({
-      ...req.body,
-      isParticipant: true,
-    }).catch(next);
+    try {
+      const user = await UserModel.create({
+        ...req.body,
+        isParticipant: true,
+      });
 
-    res.send(user);
+      const preparedUser = user.toObject();
+      delete preparedUser.password;
+
+      res.send(preparedUser);
+    } catch (err) {
+      next(err);
+    }
   },
 
   login: async (req, res, next) => {
     passport.authenticate("local", { session: false }, (err, user, info) => {
       if (err || !user) {
-        return next(new BadRequestError(info));
+        return next(new BadRequestError(info.message));
       }
 
       req.login(user, { session: false }, (err) => {

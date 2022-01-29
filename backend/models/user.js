@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema({
   login: {
     type: String,
     required: true,
+    minLength: 3,
     maxLength: 32,
     trim: true,
     unique: true,
@@ -14,6 +15,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
+    minLength: 6,
     maxLength: 64,
   },
   email: {
