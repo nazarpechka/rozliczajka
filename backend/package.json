@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "export NODE_ENV=production && node index.js",
     "dev": "nodemon index.js",
     "test": "export NODE_ENV=test && jest --runInBand --watchAll --detectOpenHandles"
   },
