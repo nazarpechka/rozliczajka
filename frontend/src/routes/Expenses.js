@@ -13,21 +13,18 @@ import AlertContext from "../contexts/AlertContext";
 const Expenses = () => {
   const { user } = useContext(UserContext);
   const [groups, setGroups] = useState([]);
-  const [selectedGroup, setSelectedGroup] = useState({});
+  const [selectedGroup, setSelectedGroup] = useState(0);
   const [expenses, setExpenses] = useState([]);
   const { onError } = useContext(AlertContext);
 
   const fetchGroups = useRequest(
     `/api/users/${user._id}/groups`,
     "GET",
-    (groups) => {
-      setGroups(groups);
-      setSelectedGroup(groups[0]);
-    },
+    setGroups,
     onError
   );
   const fetchExpenses = useRequest(
-    `/api/groups/${selectedGroup ? selectedGroup._id : ""}/expenses`,
+    `/api/groups/${groups.length ? groups[selectedGroup]._id : ""}/expenses`,
     "GET",
     setExpenses,
     (err) => {
@@ -38,11 +35,10 @@ const Expenses = () => {
 
   useEffect(fetchGroups, []);
   useEffect(() => {
-    if (!selectedGroup) {
-      return;
+    if (groups.length) {
+      fetchExpenses();
     }
-    fetchExpenses();
-  }, [selectedGroup]);
+  }, [groups, selectedGroup]);
 
   if (!groups.length) {
     return <Section title="Lista wydatków" />;
@@ -60,17 +56,17 @@ const Expenses = () => {
             })}
             onChange={(e) => {
               setSelectedGroup(
-                groups.find((group) => group._id === e.target.value)
+                groups.findIndex((group) => group._id === e.target.value)
               );
             }}
           />
         </div>
 
-        {selectedGroup && user.isParticipant && (
+        {user.isParticipant ? (
           <CreateExpenseModal onCreation={fetchExpenses} group={selectedGroup}>
             <Button label="Nowy wydatek" />
           </CreateExpenseModal>
-        )}
+        ) : null}
       </div>
 
       {expenses.length ? (
